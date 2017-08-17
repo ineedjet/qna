@@ -43,7 +43,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #edit' do
     let(:question) { create(:question) }
-    before { get :new }
+    before { get :edit,  params: { id: question } }
 
     it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
