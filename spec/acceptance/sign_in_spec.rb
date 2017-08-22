@@ -24,7 +24,7 @@ feature 'User sign in', %q{
     fill_in 'Password', with: '123456'
     click_on 'Log in'
 
-    expect(page).to have_content 'Invalid email or password.'
+    expect(page).to have_content 'Invalid Email or password.'
     expect(current_path).to eq new_user_session_path
   end
 end
