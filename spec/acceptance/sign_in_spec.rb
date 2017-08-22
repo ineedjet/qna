@@ -12,7 +12,7 @@ feature 'User sign in', %q{
     visit new_user_session_path
     fill_in 'Email', with: 'user@test.com'
     fill_in 'Password', with: '12345678'
-    click_on 'Sign in'
+    click_on 'Log in'
 
     expect(page).to have_content 'Signed in successfully.'
     expect(curent_path).to eq root_path
