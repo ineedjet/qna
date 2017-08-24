@@ -7,19 +7,24 @@ feature 'Show questions list', %q{
 } do
 
   given (:user) { create(:user) }
-  given (:question) { create(:question) }
+  let(:questions) { create_list(:question, 3) }
 
-  before { question }
-
+  before { questions }
 
   scenario 'Authenticated  user get questions list' do
     sign_in(user)
     visit questions_path
-    expect(page).to have_content question.title
+    questions.each do |question|
+      expect(page).to have_content question.title
+      expect(page).to have_content question.body
+      end
   end
 
   scenario 'Non-authenticated  user get questions list' do
     visit questions_path
-    expect(page).to have_content question.title
+    questions.each do |question|
+      expect(page).to have_content question.title
+      expect(page).to have_content question.body
+    end
   end
 end
