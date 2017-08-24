@@ -17,6 +17,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
+    let(:answers) { create_list(:answer, 2, question: question) }
+
     before { get :show, params: { id: question } }
 
     it 'assigns the requested question to @question' do
@@ -29,6 +31,10 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'assigns the new answer to @answer' do
       expect(assigns(:answer)).to be_a_new(Answer)
+    end
+
+    it 'assigns the answers to @answers' do
+      expect(assigns(:answers)).to match_array(answers)
     end
   end
 
