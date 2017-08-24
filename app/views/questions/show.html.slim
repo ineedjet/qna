@@ -1,4 +1,8 @@
 p
+  - @answers.each do |answer|
+    p = answer.body
+
+p
   = form_for [@question, @answer] do |f|
     = f.label :body
     = f.text_area :body
