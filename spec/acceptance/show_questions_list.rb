@@ -7,7 +7,7 @@ feature 'Show questions list', %q{
 } do
 
   given (:user) { create(:user) }
-  let(:questions) { create_list(:question, 3) }
+  given (:questions) { create_list(:question, 3) }
 
   before { questions }
 
