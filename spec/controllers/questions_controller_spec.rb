@@ -135,9 +135,13 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe  'DELETE #destroy' do
-    context 'with same user' do
-      sign_in_user
+    before { user }
+    before do
+      @request.env['devise.mapping'] = Devise.mappings[:user]
+      sign_in user
+    end
 
+    context 'with same user' do
       before { question }
 
       it 'deletes question' do
@@ -151,8 +155,6 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'with stranger user' do
-      sign_in_user
-
       before { user2 }
       before { question2 }
 
