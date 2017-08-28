@@ -3,11 +3,12 @@ class AnswersController < ApplicationController
   before_action :load_question, only: [:new, :create]
 
   def new
-    @answer = Answer.new(question: @question)
+    @answer = @question.answers.new(user: current_user)
   end
 
   def create
     @answer = @question.answers.new(answer_params)
+    @answer.user = current_user
 
     if @answer.save
       flash[:notice] = 'Your answer successfully created'
