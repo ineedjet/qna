@@ -1,6 +1,9 @@
 p
   - @answers.each do |answer|
     p = answer.body
+    p
+      - if current_user == answer.user
+        = link_to 'delete', [ @question, answer ], :method => :delete, :title => "Delete answer #{answer.id}"
 
 p
   = form_for [@question, @answer] do |f|

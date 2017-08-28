@@ -34,6 +34,6 @@ feature 'Delete answer', %q{
     visit questions_path
     click_on question.title
 
-    expect(page).to have_no_link "Delete #{answer2.id}"
+    expect(page).to have_no_link "Delete answer #{answer2.id}"
   end
 end
