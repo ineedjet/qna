@@ -26,8 +26,9 @@ feature 'Delete question', %q{
   end
 
   scenario 'User try delete a strangers question' do
+    sign_in(user)
     visit questions_path
 
-    expect(page).to have_no_link "Delete #{question.id}"
+    expect(page).to have_no_link "Delete #{question2.id}"
   end
 end
