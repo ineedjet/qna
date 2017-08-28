@@ -28,7 +28,7 @@ feature 'Delete answer', %q{
     expect(page).to have_content 'Your answer successfully deleted'
   end
 
-  scenario 'User try delete a strangers question' do
+  scenario 'User try delete a strangers answer' do
     sign_in(user)
 
     visit questions_path
