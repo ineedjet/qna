@@ -6,17 +6,11 @@ feature 'Delete answer', %q{
   I want to be able to remove my answer
 } do
 
-  given (:user) { create(:user) }
-  given (:user2) { create(:user) }
-  given (:question) { create :question, user: user }
-  given (:answer) { create :answer, question: question, user: user }
-  given (:answer2) { create :answer, question: question, user: user2 }
-
-  before { user }
-  before { user2 }
-  before { question }
-  before { answer }
-  before { answer2 }
+  given! (:user) { create(:user) }
+  given! (:user2) { create(:user) }
+  given! (:question) { create :question, user: user }
+  given! (:answer) { create :answer, question: question, user: user }
+  given! (:answer2) { create :answer, question: question, user: user2 }
 
   scenario 'User delete his answer' do
     sign_in(user)
