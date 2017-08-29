@@ -159,7 +159,7 @@ RSpec.describe QuestionsController, type: :controller do
       before { question2 }
 
       it 'deletes question' do
-        expect { delete :destroy, params: { id: question2 } }.to change(user2.questions, :count).by(0)
+        expect { delete :destroy, params: { id: question2 } }.to_not change(user2.questions, :count)
       end
 
       it 'redirect to index view' do
