@@ -11,11 +11,6 @@ feature 'Delete question', %q{
   given! (:question) { create :question, user: user }
   given! (:question2) { create :question, user: user2 }
 
-  before { user }
-  before { user2 }
-  before { question }
-  before { question2 }
-
   scenario 'User delete his question' do
     sign_in(user)
 
