@@ -11,9 +11,9 @@ p
         = link_to 'delete', [ @question, answer ], :method => :delete, :title => "Delete answer #{answer.id}"
 
 p
-  -if @answer.errors
-    -@answer.errors.full_messages.each do |msg|
-      p=msg
+  - if @answer.errors
+    - @answer.errors.full_messages.each do |msg|
+      p = msg
 
   = form_for [@question, @answer] do |f|
     = f.label :body
