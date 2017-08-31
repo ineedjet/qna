@@ -1,3 +1,7 @@
+-if @question.errors
+  -@question.errors.full_messages.each do |msg|
+    p=msg
+
 = form_for @question do |f|
   = f.label :title
   = f.text_field :title
