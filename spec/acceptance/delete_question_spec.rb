@@ -14,16 +14,16 @@ feature 'Delete question', %q{
   scenario 'User delete his question' do
     sign_in(user)
 
-    visit questions_path
-    click_on "Delete #{question.id}"
+    visit question_path question
+    click_on "Delete"
 
     expect(page).to have_content 'Your question successfully deleted'
   end
 
   scenario 'User try delete a strangers question' do
     sign_in(user)
-    visit questions_path
+    visit question_path question2
 
-    expect(page).to have_no_link "Delete #{question2.id}"
+    expect(page).to have_no_link "Delete"
   end
 end
