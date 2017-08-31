@@ -8,8 +8,8 @@ feature 'Delete question', %q{
 
   given! (:user) { create(:user) }
   given! (:user2) { create(:user) }
-  given! (:question) { create :question, user: user }
-  given! (:question2) { create :question, user: user2 }
+  given (:question) { create :question, user: user }
+  given (:question2) { create :question, user: user2 }
 
   scenario 'User delete his question' do
     sign_in(user)
@@ -18,6 +18,7 @@ feature 'Delete question', %q{
     click_on "Delete"
 
     expect(page).to have_content 'Your question successfully deleted'
+    expect(page).to have_no_content question.title
   end
 
   scenario 'User try delete a strangers question' do
