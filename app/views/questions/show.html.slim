@@ -1,4 +1,9 @@
 p
+  p
+    = @question.title
+  p
+    = @question.body
+p
   - @answers.each do |answer|
     p = answer.body
     p
