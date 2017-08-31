@@ -7,16 +7,19 @@ feature 'Create question', %q{
 } do
 
   given (:user) { create(:user) }
+  given (:question) { create(:question, user: user) }
 
   scenario 'Authenticated  user creates question' do
     sign_in(user)
 
     visit questions_path
     click_on 'Ask question'
-    fill_in 'Title', with: 'Test question'
-    fill_in 'Body', with: 'Test question body text text text text'
+    fill_in 'Title', with: question.title
+    fill_in 'Body', with: question.body
     click_on 'Create'
 
+    expect(page).to have_content question.title
+    expect(page).to have_content question.body
     expect(page).to have_content 'Your question successfully created'
   end
 
