@@ -6,10 +6,8 @@ feature 'Show questions list', %q{
   I want to be able to look all questions
 } do
 
-  given (:user) { create(:user) }
-  given (:questions) { create_list(:question, 3) }
-
-  before { questions }
+  given! (:user) { create(:user) }
+  given! (:questions) { create_list(:question, 3, user: user) }
 
   scenario 'Authenticated  user get questions list' do
     sign_in(user)
