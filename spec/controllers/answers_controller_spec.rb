@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:user) { create(:user) }
-  let(:user2) { create(:user) }
-  let(:question) { create(:question, user: user) }
-  let(:answer) { create(:answer, question: question, user: user) }
-  let(:answer2) { create(:answer, question: question, user: user2) }
+  let!(:user) { create(:user) }
+  let!(:user2) { create(:user) }
+  let!(:question) { create(:question, user: user) }
+  let!(:answer) { create(:answer, question: question, user: user) }
+  let!(:answer2) { create(:answer, question: question, user: user2) }
 
   describe 'POST #create' do
     sign_in_user
@@ -35,17 +35,10 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe  'DELETE #destroy' do
-    before { user }
-    before { user2 }
-    before { question }
-
-    before do
-      @request.env['devise.mapping'] = Devise.mappings[:user]
-      sign_in user
-    end
+    sign_in_user
+    before { answer.update(user_id: @user.id) }
 
     context 'with same user' do
-      before { answer }
 
       it 'deletes answer' do
         expect { delete :destroy, params: { question_id: question.id, id: answer } }.to change(question.answers, :count).by(-1)
@@ -58,7 +51,6 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'with stranger user' do
-      before { answer2 }
 
       it 'deletes answer' do
         expect { delete :destroy, params: { question_id: question.id, id: answer2 } }.to_not change(question.answers, :count)
