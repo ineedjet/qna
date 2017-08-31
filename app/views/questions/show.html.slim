@@ -5,7 +5,7 @@ p
     = @question.body
   - if current_user&.author_of? @question
     p
-      = link_to 'delete', @question, :method => :delete, :title => "Delete"
+      = link_to 'delete', @question, :method => :delete, :title => "Delete question"
 p
   - @answers.each do |answer|
     p = answer.body
