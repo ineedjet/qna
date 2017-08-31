@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:user) { create(:user) }
-  let(:user2) { create(:user) }
+  let!(:user) { create(:user) }
+  let!(:user2) { create(:user) }
   let(:question) { create(:question, user: user) }
   let(:question2) { create(:question, user: user2) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2, user: user) }
+    let!(:questions) { create_list(:question, 2, user: user) }
     before { get :index }
 
     it 'populates an array of all questions' do
@@ -139,17 +139,12 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe  'DELETE #destroy' do
-    before { user }
-    before do
-      @request.env['devise.mapping'] = Devise.mappings[:user]
-      sign_in user
-    end
+    sign_in_user
+    before { question.update(user_id: @user.id) }
 
     context 'with same user' do
-      before { question }
-
       it 'deletes question' do
-        expect { delete :destroy, params: { id: question } }.to change(user.questions, :count).by(-1)
+        expect { delete :destroy, params: { id: question } }.to change(@user.questions, :count).by(-1)
       end
 
       it 'redirect to index view' do
@@ -159,7 +154,6 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'with stranger user' do
-      before { user2 }
       before { question2 }
 
       it 'deletes question' do
