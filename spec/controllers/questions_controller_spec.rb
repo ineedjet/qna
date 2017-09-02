@@ -1,10 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create(:question) }
+  let!(:user) { create(:user) }
+  let!(:user2) { create(:user) }
+  let(:question) { create(:question, user: user) }
+  let(:question2) { create(:question, user: user2) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2) }
+    let!(:questions) { create_list(:question, 2, user: user) }
     before { get :index }
 
     it 'populates an array of all questions' do
@@ -17,6 +20,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
+    let(:answers) { create_list(:answer, 2, question: question, user: user) }
+
     before { get :show, params: { id: question } }
 
     it 'assigns the requested question to @question' do
@@ -26,9 +31,23 @@ RSpec.describe QuestionsController, type: :controller do
     it 'renders show view' do
       expect(response).to render_template :show
     end
+
+    it 'assigns the new answer to @answer' do
+      expect(assigns(:answer)).to be_a_new(Answer)
+    end
+
+    it 'assigns the new answer to question' do
+      expect(assigns(:answer).question).to eq question
+    end
+
+    it 'assigns the answers to @answers' do
+      expect(assigns(:answers)).to match_array(answers)
+    end
   end
 
   describe 'GET #new' do
+    sign_in_user
+
     before { get :new }
 
     it 'assigns the new question to @question' do
@@ -41,6 +60,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
+    sign_in_user
+
     before { get :edit,  params: { id: question } }
 
     it 'assigns the requested question to @question' do
@@ -53,6 +74,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+    sign_in_user
+
     context 'with valid attributes' do
       it 'saves the new question in the database' do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
@@ -61,6 +84,11 @@ RSpec.describe QuestionsController, type: :controller do
       it 'redirect to show view' do
         post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to question_path(assigns(:question))
+      end
+
+      it 'check user is author' do
+        post :create, params: { question: attributes_for(:question) }
+        expect(assigns(:question).user).to eq @user
       end
     end
 
@@ -78,6 +106,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    sign_in_user
+
     context 'with valid attributes' do
       it 'assign the requested question to @question' do
         patch :update, params: { id: question, question: attributes_for(:question) }
@@ -114,15 +144,31 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe  'DELETE #destroy' do
-    before { question }
+    sign_in_user
+    before { question.update(user_id: @user.id) }
 
-    it 'deletes question' do
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+    context 'with same user' do
+      it 'deletes question' do
+        expect { delete :destroy, params: { id: question } }.to change(@user.questions, :count).by(-1)
+      end
+
+      it 'redirect to index view' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirect to index view' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+    context 'with stranger user' do
+      before { question2 }
+
+      it 'deletes question' do
+        expect { delete :destroy, params: { id: question2 } }.to_not change(user2.questions, :count)
+      end
+
+      it 'redirect to index view' do
+        delete :destroy, params: { id: question2 }
+        expect(response).to redirect_to questions_path
+      end
     end
   end
 
