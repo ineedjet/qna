@@ -11,6 +11,7 @@ class AnswersController < ApplicationController
       flash[:notice] = 'Your answer successfully created'
       redirect_to @question
     else
+      @answers = @question.answers
       render 'questions/show'
     end
   end
