@@ -15,7 +15,7 @@ p
 
 p
   = form_for [@question, @answer] do |f|
-    - if @answer.errors
+    - if @answer.errors.any?
       - @answer.errors.full_messages.each do |msg|
         p = msg
     = f.label :body

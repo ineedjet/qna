@@ -1,5 +1,5 @@
 = form_for @question do |f|
-  - if @question.errors
+  - if @question.errors.any?
     - @question.errors.full_messages.each do |msg|
       p = msg
   = f.label :title
