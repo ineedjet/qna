@@ -9,7 +9,7 @@ feature 'Create answer', %q{
   given! (:user) { create(:user) }
   given! (:question) { create(:question, user: user) }
 
-  scenario 'Authenticated  user creates answer for question' do
+  scenario 'Authenticated  user creates answer for question', js: true do
     sign_in(user)
 
     visit questions_path
@@ -21,7 +21,7 @@ feature 'Create answer', %q{
     expect(page).to have_content 'Test answer body text text text text'
   end
 
-  scenario 'Authenticated  user try to create invalid answer for question' do
+  scenario 'Authenticated  user try to create invalid answer for question', js:true do
     sign_in(user)
 
     visit questions_path
