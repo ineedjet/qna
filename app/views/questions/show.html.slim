@@ -11,10 +11,11 @@ p
     = render 'answers/answer', answer: answer
 
 p
-  = form_for [@question, @answer], remote: true do |f|
-    - if @answer.errors.any?
-      - @answer.errors.full_messages.each do |msg|
-        p = msg
-    = f.label :body
-    = f.text_area :body
-    = f.submit 'Create answer'
+  - if current_user.present?
+    = form_for [@question, @answer], remote: true do |f|
+      - if @answer.errors.any?
+        - @answer.errors.full_messages.each do |msg|
+          p = msg
+      = f.label :body
+      = f.text_area :body
+      = f.submit 'Create answer'
