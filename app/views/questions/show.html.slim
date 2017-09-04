@@ -6,18 +6,15 @@ p
   - if current_user&.author_of? @question
     p
       = link_to 'delete', @question, :method => :delete, :title => "Delete question"
-p
-  - @answers.each do |answer|
-    p = answer.body
-    p
-      - if current_user&.author_of? answer
-        = link_to 'delete', [ @question, answer ], :method => :delete, :title => "Delete answer"
+.answers
+  = render @question.answers
 
 p
-  = form_for [@question, @answer] do |f|
-    - if @answer.errors.any?
-      - @answer.errors.full_messages.each do |msg|
-        p = msg
-    = f.label :body
-    = f.text_area :body
-    = f.submit 'Create answer'
+  - if current_user.present?
+    = form_for [@question, @answer], remote: true do |f|
+      - if @answer.errors.any?
+        - @answer.errors.full_messages.each do |msg|
+          p = msg
+      = f.label :body
+      = f.text_area :body
+      = f.submit 'Create answer'

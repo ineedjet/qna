@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:create]
+  before_action :load_question, only: [:create, :destroy]
   before_action :load_answer, only: [:destroy]
 
   def create
@@ -9,10 +9,8 @@ class AnswersController < ApplicationController
 
     if @answer.save
       flash[:notice] = 'Your answer successfully created'
-      redirect_to @question
     else
-      @answers = @question.answers
-      render 'questions/show'
+      flash[:notice] = 'Your answer has a problem'
     end
   end
 
@@ -22,7 +20,7 @@ class AnswersController < ApplicationController
       @answer.destroy
     end
 
-    redirect_to question_path
+    redirect_to question_path @question
   end
 
   private
