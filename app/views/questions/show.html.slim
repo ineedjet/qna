@@ -7,8 +7,7 @@ p
     p
       = link_to 'delete', @question, :method => :delete, :title => "Delete question"
 .answers
-  - @question.answers.each do |answer|
-    = render 'answers/answer', answer: answer
+  = render @question.answers
 
 p
   - if current_user.present?
