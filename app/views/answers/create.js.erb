@@ -2,6 +2,6 @@ $('.notice').html('<%= j render 'shared/notice' %>');
 <% if @answer.errors.any? %>
   $('.notice').append("<%= @answer.errors.full_messages.join('<br>') %>");
 <% else %>
+  $('textarea#answer_body').val('');
   $('.answers').append('<%= j render @answer %>');
-  $('#answer_body').val('');
 <% end %>
