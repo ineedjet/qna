@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-feature 'Edit question', %q{
-  In order to fix question
+feature 'Edit answer', %q{
+  In order to fix answer
   As an authenticated user
-  I want to be able to edit my question
+  I want to be able to edit my answer
 } do
 
   given!(:user) { create(:user) }

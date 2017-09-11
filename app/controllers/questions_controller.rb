@@ -30,10 +30,15 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question
-    else
-      render :edit
+    #if @question.update(question_params)
+    #  redirect_to @question
+    #else
+    #  render :edit
+    #end
+    #
+    if current_user.author_of? @question
+      flash[:notice] = 'Your question successfully updated'
+      @question.update(question_params)
     end
   end
 

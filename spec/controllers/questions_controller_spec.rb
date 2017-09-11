@@ -105,30 +105,42 @@ RSpec.describe QuestionsController, type: :controller do
 
   end
 
-  describe 'PATCH #update' do
-    sign_in_user
 
-    context 'with valid attributes' do
-      it 'assign the requested question to @question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
+  describe 'PATCH #update' do
+
+    context 'with same user' do
+      sign_in_user
+      before { question.update(user_id: @user.id) }
+
+      it 'assign the update question to @question' do
+        patch :update, params: { id: question, question: attributes_for(:question) }, format: :js
+
         expect(assigns(:question)).to eq question
       end
 
       it 'change question attributes' do
-        patch :update, params: { id: question, question: { title:'new title', body: 'new body' } }
+        patch :update, params: { id: question, question: { title: "New title", body: 'New body' } }, format: :js
         question.reload
-        expect(question.title).to eq 'new title'
-        expect(question.body).to eq 'new body'
+
+        expect(question.title).to eq 'New title'
+        expect(question.body).to eq 'New body'
       end
 
-      it 'redirect to the updated question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
-        expect(response).to redirect_to question
+      it 'change question attributes render' do
+        patch :update, params: { id: question, question: { title: "New title", body: 'New body' } }, format: :js
+
+        expect(response).to render_template 'questions/update'
       end
+
+
     end
 
-    context 'with invalid attributes' do
-      before { patch :update, params: { id: question, question: { title:'new title', body: nil } } }
+    context 'with same user and invalid attributes' do
+      sign_in_user
+      before do
+        question.update(user_id: @user.id)
+        patch :update, params: { id: question, question: { title:'new title', body: nil } }, format: :js
+      end
 
       it 'does not change question attributes' do
         question.reload
@@ -136,8 +148,19 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.body).to eq 'MyText'
       end
 
-      it 'redirect to the updated question' do
-        expect(response).to render_template :edit
+    end
+
+    context 'with stranger user' do
+      sign_in_user
+
+      it 'change answer attributes' do
+        question_old_title = question.title
+        question_old_body = question.body
+        patch :update, params: { id: question, question: { title: "New title", body: 'New body' } }, format: :js
+        question.reload
+
+        expect(question.title).to eq question_old_title
+        expect(question.body).to eq question_old_body
       end
     end
 
