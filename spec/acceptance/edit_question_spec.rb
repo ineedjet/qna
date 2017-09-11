@@ -26,13 +26,11 @@ feature 'Edit question', %q{
     scenario 'User can edit his question', js:true do
       question_body_old = question.body
       question_title_old = question.title
-      click_on 'Edit'
+      #click_on 'Edit'
       within '.question' do
         fill_in 'Title', with: 'edited question title'
         fill_in 'Body', with: 'edited question body'
         click_on 'Save question'
-
-        save_and_open_page
 
         expect(page).to have_content 'edited question title'
         expect(page).to have_content 'edited question body'

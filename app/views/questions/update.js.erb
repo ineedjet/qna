@@ -1,12 +1,12 @@
 $('.notice').html('<%= j render 'shared/notice' %>');
-<% if @answer.errors.any? %>
-  $('.notice').append("<%= @answer.errors.full_messages.join('<br>') %>");
+<% if @question.errors.any? %>
+  $('.notice').append("<%= @question.errors.full_messages.join('<br>') %>");
 <% else %>
-  $("#answer-<%= @answer.id %>").html('<%= j render @answer %>');
-  $('.edit-answer-link').click(function(e) {
+  $("#question-<%= @question.id %>").html('<%= j render @question %>');
+  $('.edit-question-link').click(function(e) {
       e.preventDefault();
       $(this).hide();
-      answer_id = $(this).data('answerId');
-      $('form#edit-answer-' + answer_id).show();
+      question_id = $(this).data('questionId');
+      $('form#edit-question-' + question_id).show();
   });
 <% end %>
