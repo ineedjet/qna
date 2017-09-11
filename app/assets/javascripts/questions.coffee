@@ -8,3 +8,9 @@ $ ->
     $(this).hide();
     question_id = $(this).data('questionId')
     $('form#edit-question-' + question_id).show()
+
+
+  $('.delete-answer-link').click (e) ->
+    e.preventDefault();
+    answer_id = $(this).data('answerId');
+    $('div#answer-' + answer_id).html('');
