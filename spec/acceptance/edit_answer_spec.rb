@@ -26,8 +26,8 @@ feature 'Edit answer', %q{
 
     scenario 'User can edit his answer', js:true do
       answer_body_old = answer.body
-      click_on 'Edit'
       within '.answers' do
+        click_on 'Edit'
         fill_in 'Answer', with: 'edited answer'
         click_on 'Save'
 
