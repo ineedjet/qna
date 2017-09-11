@@ -24,8 +24,17 @@ feature 'Edit question', %q{
       end
     end
 
-    scenario 'User can edit his answer' do
+    scenario 'User can edit his answer', js:true do
+      answer_body_old = answer.body
       click_on 'Edit'
+      within '.answers' do
+        fill_in 'Answer', with: 'edited answer'
+        click_on 'Save'
+
+        expect(page).to have_content'edited answer'
+        expect(page).to_not have_content answer_body_old
+        expect(page).to_not have_selector 'textarea'
+      end
     end
 
   end

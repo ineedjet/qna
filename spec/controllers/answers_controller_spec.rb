@@ -39,6 +39,54 @@ RSpec.describe AnswersController, type: :controller do
 
   end
 
+  describe 'PATCH #update' do
+
+    context 'with same user' do
+      sign_in_user
+      before { answer.update(user_id: @user.id) }
+
+      it 'assign the update answer to @answer' do
+        patch :update, params: { id: answer, question_id: question.id, answer: attributes_for(:answer) }, format: :js
+
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'assign the question for update answer to @question' do
+        patch :update, params: { id: answer, question_id: question.id, answer: attributes_for(:answer) }, format: :js
+
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'change answer attributes' do
+        patch :update, params: { id: answer, question_id: question.id, answer: { body: 'New body' } }, format: :js
+        answer.reload
+
+        expect(answer.body).to eq 'New body'
+      end
+
+      it 'change answer attributes' do
+        patch :update, params: { id: answer, question_id: question.id, answer: { body: 'New body' } }, format: :js
+
+        expect(response).to render_template 'answers/update'
+      end
+
+
+    end
+
+    context 'with stranger user' do
+      sign_in_user
+
+      it 'change answer attributes' do
+        answer_old_body = answer.body
+        patch :update, params: { id: answer, question_id: question.id, answer: { body: 'New body' } }, format: :js
+        answer.reload
+
+        expect(answer.body).to eq answer_old_body
+      end
+    end
+
+  end
+
   describe  'DELETE #destroy' do
     sign_in_user
     before { answer.update(user_id: @user.id) }
