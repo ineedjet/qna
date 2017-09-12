@@ -4,9 +4,4 @@ $('.notice').html('<%= j render 'shared/notice' %>');
 <% else %>
   $('textarea#answer_body').val('');
   $('.answers').append('<%= j render @answer %>');
-  $('.delete-answer-link').click(function(e) {
-      e.preventDefault();
-      answer_id = $(this).data('answerId');
-      $('div#answer-' + answer_id).html('');
-  });
 <% end %>

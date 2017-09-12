@@ -1,6 +1,2 @@
 $('.notice').html('<%= j render 'shared/notice' %>');
-$('.delete-answer-link').click(function(e) {
-    e.preventDefault();
-    answer_id = $(this).data('answerId');
-    $('div#answer-' + answer_id).html('');
-});
+$('div#answer-<%= @answer.id %>').html('');
