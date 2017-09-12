@@ -10,8 +10,9 @@ RSpec.describe Answer, type: :model do
   context 'set best' do
     let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
-    let(:answer) { create(:answer, question: question, user: user) }
-    let(:answer2) { create(:answer, question: question, user: user) }
+    let!(:answer) { create(:answer, question: question, user: user) }
+    let!(:answer2) { create(:answer, question: question, user: user) }
+    let!(:answer3) { create(:answer, question: question, user: user) }
     before { answer.set_best }
 
     it 'answer is best if it set' do
@@ -22,6 +23,17 @@ RSpec.describe Answer, type: :model do
       answer2.set_best
       answer.reload
       expect(answer.best?).to eq false
+    end
+
+    it 'should be correctly ordered if best not set' do
+      expect(question.answers.first).to eq answer
+    end
+
+    it 'should be correctly ordered if best is set' do
+      answer2.set_best
+      expect(question.answers.first).to eq answer2
+      expect(question.answers.second).to eq answer
+      expect(question.answers.last).to eq answer3
     end
   end
 end
