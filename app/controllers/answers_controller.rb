@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:create, :destroy, :update]
-  before_action :load_answer, only: [:destroy, :update]
+  before_action :load_question, only: [:create, :destroy, :update, :set_best]
+  before_action :load_answer, only: [:destroy, :update, :set_best]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -25,6 +25,13 @@ class AnswersController < ApplicationController
     if current_user.author_of? @answer
       flash[:notice] = 'Your answer successfully deleted'
       @answer.destroy
+    end
+  end
+
+  def set_best
+    if current_user.author_of? @answer.question
+      flash[:notice] = 'Answer successfully set best'
+      @answer.set_best
     end
   end
 

@@ -87,6 +87,60 @@ RSpec.describe AnswersController, type: :controller do
 
   end
 
+  describe 'PATCH #set_best' do
+    sign_in_user
+
+    context 'for user question' do
+      before { question.update(user_id: @user.id) }
+
+      it 'assign the best answer to @answer' do
+        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
+
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'assign the answers question to @question' do
+        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
+
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'change answer attributes' do
+        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
+        answer.reload
+
+        expect(answer.best?).to eq true
+      end
+
+      it 'change answer attributes' do
+        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
+
+        expect(response).to render_template 'answers/set_best'
+      end
+
+
+    end
+
+    context 'with stranger user question' do
+      it 'do not change answer attributes if it strangers question' do
+        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
+        answer.reload
+
+        expect(answer.best?).to_not eq true
+      end
+    end
+
+    context 'with stranger user' do
+      it 'change answer attribute set_best' do
+        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
+        answer.reload
+
+        expect(answer.body).to_not eq true
+      end
+    end
+
+  end
+
   describe  'DELETE #destroy' do
     sign_in_user
     before { answer.update(user_id: @user.id) }
