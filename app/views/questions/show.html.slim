@@ -1,5 +1,9 @@
 .question
   = render @question
+p Attachments:
+ul
+  - @question.attachments.each do |a|
+    li = a.file.file.filename
 
 .answers
   = render @question.answers
