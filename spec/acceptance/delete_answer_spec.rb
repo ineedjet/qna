@@ -11,7 +11,7 @@ feature 'Delete answer', %q{
   given! (:question) { create :question, user: user }
   given! (:answer) { create :answer, question: question, user: user }
 
-  scenario 'User try delete his answer' do
+  scenario 'User try delete his answer', js:true do
     sign_in(user)
 
     visit questions_path
@@ -23,7 +23,7 @@ feature 'Delete answer', %q{
     expect(current_path).to eq question_path(question)
   end
 
-  scenario 'User try delete a strangers answer' do
+  scenario 'User try delete a strangers answer', js:true do
     sign_in(user2)
 
     visit questions_path

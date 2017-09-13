@@ -39,6 +39,108 @@ RSpec.describe AnswersController, type: :controller do
 
   end
 
+  describe 'PATCH #update' do
+
+    context 'with same user' do
+      sign_in_user
+      before { answer.update(user_id: @user.id) }
+
+      it 'assign the update answer to @answer' do
+        patch :update, params: { id: answer, question_id: question.id, answer: attributes_for(:answer) }, format: :js
+
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'assign the question for update answer to @question' do
+        patch :update, params: { id: answer, question_id: question.id, answer: attributes_for(:answer) }, format: :js
+
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'change answer attributes' do
+        patch :update, params: { id: answer, question_id: question.id, answer: { body: 'New body' } }, format: :js
+        answer.reload
+
+        expect(answer.body).to eq 'New body'
+      end
+
+      it 'change answer attributes' do
+        patch :update, params: { id: answer, question_id: question.id, answer: { body: 'New body' } }, format: :js
+
+        expect(response).to render_template 'answers/update'
+      end
+
+
+    end
+
+    context 'with stranger user' do
+      sign_in_user
+
+      it 'change answer attributes' do
+        answer_old_body = answer.body
+        patch :update, params: { id: answer, question_id: question.id, answer: { body: 'New body' } }, format: :js
+        answer.reload
+
+        expect(answer.body).to eq answer_old_body
+      end
+    end
+
+  end
+
+  describe 'PATCH #set_best' do
+    sign_in_user
+
+    context 'for user question' do
+      before { question.update(user_id: @user.id) }
+
+      it 'assign the best answer to @answer' do
+        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
+
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'assign the answers question to @question' do
+        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
+
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'change answer attributes' do
+        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
+        answer.reload
+
+        expect(answer.best?).to eq true
+      end
+
+      it 'change answer attributes' do
+        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
+
+        expect(response).to render_template 'answers/set_best'
+      end
+
+
+    end
+
+    context 'with stranger user question' do
+      it 'do not change answer attributes if it strangers question' do
+        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
+        answer.reload
+
+        expect(answer.best?).to_not eq true
+      end
+    end
+
+    context 'with stranger user' do
+      it 'change answer attribute set_best' do
+        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
+        answer.reload
+
+        expect(answer.body).to_not eq true
+      end
+    end
+
+  end
+
   describe  'DELETE #destroy' do
     sign_in_user
     before { answer.update(user_id: @user.id) }
@@ -46,25 +148,21 @@ RSpec.describe AnswersController, type: :controller do
     context 'with same user' do
 
       it 'deletes answer' do
-        expect { delete :destroy, params: { question_id: question.id, id: answer } }.to change(question.answers, :count).by(-1)
+        expect { delete :destroy, params: { question_id: question.id, id: answer }, format: :js }.to change(question.answers, :count).by(-1)
       end
 
-      it 'redirect to question view' do
-        delete :destroy, params: { question_id: question.id, id: answer }
-        expect(response).to redirect_to question_path
+      it 'no redirect to question view' do
+        delete :destroy, params: { question_id: question.id, id: answer }, format: :js
+        expect(response).to render_template 'answers/destroy'
       end
     end
 
     context 'with stranger user' do
 
       it 'deletes answer' do
-        expect { delete :destroy, params: { question_id: question.id, id: answer2 } }.to_not change(question.answers, :count)
+        expect { delete :destroy, params: { question_id: question.id, id: answer2 }, format: :js }.to_not change(question.answers, :count)
       end
 
-      it 'redirect to question view' do
-        delete :destroy, params: { question_id: question.id, id: answer2 }
-        expect(response).to redirect_to question_path(question)
-      end
     end
   end
 

@@ -1,0 +1,21 @@
+div id="question-#{question.id}"
+  p
+    = @question.title
+  p
+    = @question.body
+  - if current_user&.author_of? @question
+    p
+      p
+        = link_to 'delete', @question, :method => :delete, :title => "Delete question"
+      p
+        = link_to 'Edit', "", class: 'edit-question-link', data: {question_id: @question.id}
+      p
+        = form_for @question, remote: true, html: {id: "edit-question-#{@question.id}"}  do |f|
+          p
+            = f.label :title, "Title"
+            = f.text_area :title
+          p
+            = f.label :body, "Body"
+            = f.text_area :body
+          p
+            = f.submit 'Save question'

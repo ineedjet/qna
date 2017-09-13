@@ -1,0 +1,12 @@
+$('.notice').html('<%= j render 'shared/notice' %>');
+<% if @question.errors.any? %>
+  $('.notice').append("<%= @question.errors.full_messages.join('<br>') %>");
+<% else %>
+  $("#question-<%= @question.id %>").html('<%= j render @question %>');
+  $('.edit-question-link').click(function(e) {
+      e.preventDefault();
+      $(this).hide();
+      question_id = $(this).data('questionId');
+      $('form#edit-question-' + question_id).show();
+  });
+<% end %>

@@ -1,11 +1,6 @@
-p
-  p
-    = @question.title
-  p
-    = @question.body
-  - if current_user&.author_of? @question
-    p
-      = link_to 'delete', @question, :method => :delete, :title => "Delete question"
+.question
+  = render @question
+
 .answers
   = render @question.answers
 
