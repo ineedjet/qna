@@ -16,4 +16,8 @@ p
           p = msg
       = f.label :body
       = f.text_area :body
+      p
+        = f.fields_for :attachments do |a|
+          = a.label :file
+          = a.file_field :file
       = f.submit 'Create answer'

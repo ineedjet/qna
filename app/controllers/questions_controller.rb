@@ -8,6 +8,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new(question: @question)
+    @answer.attachments.build
     @answers = @question.answers
   end
 
