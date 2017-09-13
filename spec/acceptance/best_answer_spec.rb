@@ -21,7 +21,7 @@ feature 'Set best answer', %q{
       click_on "Set best answer"
     end
     expect(page).to have_content 'Answer successfully set best'
-
+    expect(page).to have_css '.best'
   end
 
   scenario 'User try set best his answer for his question', js:true do
@@ -33,7 +33,7 @@ feature 'Set best answer', %q{
       click_on "Set best answer"
     end
     expect(page).to have_content 'Answer successfully set best'
-
+    expect(page).to have_css '.best'
   end
 
   scenario 'User try set best answer a strangers question', js:true do
