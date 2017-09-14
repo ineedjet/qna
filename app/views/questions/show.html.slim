@@ -10,14 +10,16 @@ ul
 
 p
   - if current_user.present?
-    = form_for [@question, @answer], remote: true do |f|
-      - if @answer.errors.any?
-        - @answer.errors.full_messages.each do |msg|
-          p = msg
-      = f.label :body
-      = f.text_area :body
-      p
-        = f.fields_for :attachments do |a|
-          = a.label :file
-          = a.file_field :file
-      = f.submit 'Create answer'
+      = form_for [@question, @answer], remote: true do |f|
+        - if @answer.errors.any?
+          - @answer.errors.full_messages.each do |msg|
+            p = msg
+        = f.label :body
+        = f.text_area :body
+        p
+          = f.fields_for :attachments do |attachment|
+            = render 'attachments/attachment_fields', f: attachment
+          .links
+            = link_to_add_association 'add file', f, :attachments, partial: 'attachments/attachment_fields'
+
+        = f.submit 'Create answer'

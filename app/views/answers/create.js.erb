@@ -4,4 +4,5 @@ $('.notice').html('<%= j render 'shared/notice' %>');
 <% else %>
   $('textarea#answer_body').val('');
   $('.answers').append('<%= j render @answer %>');
+  $('#new_answer .nested-fields').remove();
 <% end %>
