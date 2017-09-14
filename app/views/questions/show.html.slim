@@ -1,9 +1,8 @@
 .question
   = render @question
-p Attachments:
-ul
-  - @question.attachments.each do |a|
-    li = link_to a.file.file.filename, a.file.url
+  p Attachments:
+  ul
+    = render @question.attachments
 
 .answers
   = render @question.answers
