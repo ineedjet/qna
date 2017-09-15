@@ -1,2 +1,2 @@
 $('.notice').html('<%= j render 'shared/notice' %>');
-$('li#attachment-<%= @attachment.id %>').html('');
+$('li#attachment-<%= @attachment.id %>').remove();
