@@ -20,3 +20,9 @@
 # Ignore Byebug command history file.
 .byebug_history
 /config/database.yml
+
+# Ignore aploadet files
+/public/system
+/public/tmp
+/public/uploads
+/public/spec

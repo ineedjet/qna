@@ -2,8 +2,16 @@
   - if @question.errors.any?
     - @question.errors.full_messages.each do |msg|
       p = msg
-  = f.label :title
-  = f.text_field :title
-  = f.label :body
-  = f.text_area :body
-  = f.submit 'Create'
+  p
+    = f.label :title
+    = f.text_field :title
+  p
+    = f.label :body
+    = f.text_area :body
+    p
+      = f.fields_for :attachments do |attachment|
+        = render 'attachments/attachment_fields', f: attachment
+      .links
+        = link_to_add_association 'add file', f, :attachments, partial: 'attachments/attachment_fields'
+  p
+    = f.submit 'Create'

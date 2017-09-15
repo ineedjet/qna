@@ -1,5 +1,8 @@
 div id="answer-#{answer.id}" class="#{ 'best' if answer.best? }"
   p = answer.body
+  p Attachments:
+  ul
+    = render answer.attachments
   p
     - if current_user&.author_of? answer
       p
