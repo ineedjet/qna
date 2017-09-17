@@ -1,8 +1,9 @@
 .question
   = render @question
-  p Attachments:
-  ul
-    = render @question.attachments
+  - if @question.attachments.present?
+    p Attachments:
+    ul
+      = render @question.attachments
 
 .answers
   = render @question.answers
