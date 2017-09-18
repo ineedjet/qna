@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_relative 'concerns/votable_spec.rb'
 
 RSpec.describe Question, type: :model do
   it { should belong_to :user }
@@ -8,4 +9,6 @@ RSpec.describe Question, type: :model do
   it { should validate_presence_of :title }
   it { should validate_presence_of :body }
   it { should accept_nested_attributes_for :attachments }
+
+  it_behaves_like "votable"
 end
