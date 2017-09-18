@@ -1,20 +1,22 @@
 .panel.panel-default
   .panel-body
     = form_for @question do |f|
-      - if @question.errors.any?
-        - @question.errors.full_messages.each do |msg|
-          p = msg
-      p.input-group
-        = f.label :title, class: 'input-group-addon', id: 'new-question-title'
-        = f.text_field :title, class:'form-control', 'aria-describedby': 'new-question-title'
-      p.input-group
-        = f.label :body, class: 'input-group-addon', id: 'new-question-body'
-        = f.text_area :body, class:'form-control', 'aria-describedby': 'new-question-body'
-        .panel.panel-default
+      p
+        = f.label :title
+      p
+        = f.text_field :title
+      p
+        = f.label :body
+      p
+        = f.text_area :body
+      .panel.panel-default
           .panel-body
             = f.fields_for :attachments do |attachment|
               = render 'attachments/attachment_fields', f: attachment
             .links
               = link_to_add_association 'add file', f, :attachments, partial: 'attachments/attachment_fields'
+      - if @question.errors.any?
+        - @question.errors.full_messages.each do |msg|
+          p = msg
       p
         = f.submit 'Create', class: "btn btn-primary btn-md"
