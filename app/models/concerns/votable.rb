@@ -18,7 +18,7 @@ module Votable
     self.votes.where(user: user).destroy_all
   end
 
-  def rating
+  def vote_rating
     self.votes.where(vote_type: 'positive').count - self.votes.where(vote_type: 'negative').count
   end
 end
