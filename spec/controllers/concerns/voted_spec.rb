@@ -4,6 +4,7 @@ shared_examples "voted" do
   let(:model) { described_class.controller_name.classify }
 
   describe 'POST #vote' do
+    let!(:user) { create(:user) }
     let!(:votable) { create(model.underscore.to_sym, user: user) }
 
     context "Not votable's author vote positive" do
@@ -13,10 +14,6 @@ shared_examples "voted" do
         expect { post :vote_positive, params: { id: votable }, format: :json }.to change(votable, :vote_rating).by(1)
       end
 
-      it 'renders create_voted vote' do
-        # post :vote, params: { id: votable, vote_type: 'positive' }, format: :json
-        # expect(JSON.parse(response.body)['vote']['id']).to eq Vote.first.id
-      end
     end
 
     context "Not votable's author vote negative" do
@@ -26,25 +23,28 @@ shared_examples "voted" do
         expect { post :vote_negative, params: { id: votable }, format: :json }.to change(votable, :vote_rating).by(-1)
       end
 
-      it 'renders create_voted vote' do
-        # post :vote, params: { id: votable, vote_type: 'positive' }, format: :json
-        # expect(JSON.parse(response.body)['vote']['id']).to eq Vote.first.id
+    end
+
+    context "Not votable's author vote positive again" do
+      let(:voted_user) { create(:user) }
+      let!(:vote) { create(:vote, user: voted_user, votable: votable, vote_type: 'positive') }
+      sign_in_user
+
+      it 'do not saves the new vote in the database' do
+        vote.user = @user
+        expect { post :vote_negative, params: { id: votable }, format: :json }.to_not change(votable, :vote_rating)
       end
+
     end
 
     context "Votable's author" do
       sign_in_user
       before{ votable.user = @user }
 
-
       it 'not saves the new vote in the database' do
         expect { post :vote_positive, params: { id: votable }, format: :json }.to_not change(votable, :vote_rating)
       end
 
-      it 'renders error' do
-        # post :vote, params: { id: votable, vote_type: 'positive' }, format: :json
-        # expect(JSON.parse(response.body)['error']).to eq "Author can't vote his question or answer."
-      end
     end
 
     context "Anonimous voter" do
@@ -52,10 +52,6 @@ shared_examples "voted" do
         expect { post :vote_positive, params: { id: votable }, format: :json }.to_not change(votable, :vote_rating)
       end
 
-      it 'renders error' do
-        # post :vote, params: { id: votable, vote_type: 'positive' }, format: :json
-        # expect(JSON.parse(response.body)['error']).to eq "Author can't vote his question or answer."
-      end
     end
   end
 
@@ -73,11 +69,6 @@ shared_examples "voted" do
         expect { post :vote_del, params: { id: votable }, format: :json }.to change(votable, :vote_rating).by(-1)
       end
 
-      it 'renders deleted vote' do
-        #id = vote.id
-        #post :vote_del, params: { id: votable }, format: :json
-        # expect(JSON.parse(response.body)['vote']['id']).to eq id
-      end
     end
 
     context 'user is not the author of the vote' do
@@ -87,10 +78,6 @@ shared_examples "voted" do
         expect { post :vote_del, params: { id: votable }, format: :json }.to_not change(votable, :vote_rating)
       end
 
-      it 'renders error' do
-        # post :vote_del, params: { id: votable }, format: :json
-        # expect(JSON.parse(response.body)['error']).to eq "Only the author of the vote can delete it."
-      end
     end
   end
 end
