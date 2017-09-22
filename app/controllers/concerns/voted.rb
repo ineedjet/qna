@@ -7,13 +7,13 @@ module Voted
   end
 
   def vote_positive
-    unless current_user.author_of?(@votable) or @votable.vote_by(current_user)
+    unless current_user.author_of?(@votable) and @votable.vote_by(current_user)
       @votable.vote!(current_user, 'positive')
     end
   end
 
   def vote_negative
-    unless current_user.author_of?(@votable) or @votable.vote_by(current_user)
+    unless current_user.author_of?(@votable) and @votable.vote_by(current_user)
       @votable.vote!(current_user, 'negative')
     end
   end
