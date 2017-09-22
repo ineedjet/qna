@@ -19,7 +19,7 @@ module Voted
   end
 
   def vote_del
-    unless current_user.author_of?(@votable) or @votable.vote_by(current_user)
+    unless @votable.vote_by(current_user)
       @votable.vote_delete!(current_user)
     end
   end
