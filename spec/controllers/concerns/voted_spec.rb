@@ -28,20 +28,17 @@ shared_examples "voted" do
     context "Not votable's author vote positive again" do
       let(:voted_user) { create(:user) }
       let!(:vote) { create(:vote, user: voted_user, votable: votable, vote_type: 'positive') }
-      sign_in_user
 
       it 'do not saves the new vote in the database' do
-        vote.user = @user
+        sign_in_the_user(voted_user)
         expect { post :vote_negative, params: { id: votable }, format: :json }.to_not change(votable, :vote_rating)
       end
 
     end
 
     context "Votable's author" do
-      sign_in_user
-      before{ votable.user = @user }
-
       it 'not saves the new vote in the database' do
+        sign_in_the_user(user)
         expect { post :vote_positive, params: { id: votable }, format: :json }.to_not change(votable, :vote_rating)
       end
 
@@ -62,10 +59,8 @@ shared_examples "voted" do
     let!(:vote) { create(:vote, user: voted_user, votable: votable, vote_type: 'positive') }
 
     context 'user is the author of the vote' do
-      sign_in_user
-      before{ vote.user = @user }
-
       it 'deletes the vote' do
+        sign_in_the_user(voted_user)
         expect { post :vote_del, params: { id: votable }, format: :json }.to change(votable, :vote_rating).by(-1)
       end
 
