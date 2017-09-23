@@ -1,6 +1,8 @@
 div id="question-#{question.id}"
   .panel.panel-primary
-    .panel-heading = link_to question.title, question, class: "question-link"
+    .panel-heading
+      = link_to question.title, question, class: "question-link"
+      = render 'shared/vote_menu', votable: question
     .panel-body = question.body
     - if current_user&.author_of? question
       .panel-footer
