@@ -24,7 +24,10 @@ html lang="en"
           a.navbar-brand href="/" Qna
           .navbar-collapse.collapse.navbar-responsive-collapse
             ul.nav.navbar-nav
-              li= link_to "Questions", questions_path
+              li = link_to "Questions", questions_path
+              li
+                a >>>>
+              li = link_to "Завершить сессию #{current_user.email}", destroy_user_session_path
 
     .container
       .row
