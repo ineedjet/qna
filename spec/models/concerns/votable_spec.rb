@@ -23,20 +23,20 @@ shared_examples_for 'votable' do
       expect { votable.vote_delete!(voted_user) }.to change { Vote.count }.by(-1)
     end
 
-    it '#rating' do
-      expect(votable.rating).to eq 1
+    it '#vote_rating' do
+      expect(votable.vote_rating).to eq 1
     end
 
     it 'change rating +1 if vote positive' do
-      expect { votable.vote!(user, 'positive') }.to change { votable.rating }.by(1)
+      expect { votable.vote!(user, 'positive') }.to change { votable.vote_rating }.by(1)
     end
 
     it 'change rating -1 if vote negative' do
-      expect { votable.vote!(user, 'negative') }.to change { votable.rating }.by(-1)
+      expect { votable.vote!(user, 'negative') }.to change { votable.vote_rating }.by(-1)
     end
 
     it 'change rating -1 if positive vote deleted' do
-      expect { votable.vote_delete!(voted_user) }.to change { votable.rating }.by(-1)
+      expect { votable.vote_delete!(voted_user) }.to change { votable.vote_rating }.by(-1)
     end
   end
 end
