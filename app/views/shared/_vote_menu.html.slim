@@ -1,11 +1,11 @@
 .btn-group.btn-group-xs.pull-right role="group"
   - if current_user && votable.can_vote?(current_user)
-    button type="button" class="btn btn-default vote_positive" vote +1
+    => link_to 'vote +1', vote_positive_question_path(votable), method: :post, remote: true, class: "btn btn-default vote_positive"
 
-  button type="button" class="btn btn-default vote_raiting" = "raiting: " + votable.vote_rating.to_s
+  span class="btn btn-default vote_raiting" = "raiting: " + votable.vote_rating.to_s
 
   - if current_user && votable.can_vote?(current_user)
-    button type="button" class="btn btn-default vote_negative" vote -1
+    => link_to 'vote -1', vote_negative_question_path(votable), method: :post, remote: true, class: "btn btn-default vote_positive"
 
   - if current_user && votable.vote_by(current_user)
-    button type="button" class="btn btn-default delete_vote" Delete vote
+    => link_to 'Delete vote', vote_del_question_path(votable), method: :post, remote: true, class: "btn btn-default vote_positive"
