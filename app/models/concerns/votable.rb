@@ -14,6 +14,10 @@ module Votable
     self.votes.where(user: user).first
   end
 
+  def can_vote?(user)
+    !self.vote_by(user) && self.user != user
+  end
+
   def vote_delete!(user)
     self.votes.where(user: user).destroy_all
   end
