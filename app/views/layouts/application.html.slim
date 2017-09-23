@@ -27,7 +27,8 @@ html lang="en"
               li = link_to "Questions", questions_path
               li
                 a >>>>
-              li = link_to "Завершить сессию #{current_user.email}", destroy_user_session_path
+              - if current_user
+                li = link_to "Завершить сессию #{current_user.email}", destroy_user_session_path
 
     .container
       .row
