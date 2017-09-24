@@ -12,6 +12,7 @@ shared_examples "voted" do
 
       it 'saves the new vote in the database' do
         expect { post :vote_positive, params: { id: votable }, format: :json }.to change(votable, :vote_rating).by(1)
+        expect(JSON.parse(response.body)['vote_rating']).to eq votable.vote_rating
       end
 
     end
@@ -21,6 +22,7 @@ shared_examples "voted" do
 
       it 'saves the new vote in the database' do
         expect { post :vote_negative, params: { id: votable }, format: :json }.to change(votable, :vote_rating).by(-1)
+        expect(JSON.parse(response.body)['vote_rating']).to eq votable.vote_rating
       end
 
     end
@@ -32,6 +34,7 @@ shared_examples "voted" do
       it 'do not saves the new vote in the database' do
         sign_in_the_user(voted_user)
         expect { post :vote_negative, params: { id: votable }, format: :json }.to_not change(votable, :vote_rating)
+        expect(JSON.parse(response.body)['vote_rating']).to eq votable.vote_rating
       end
 
     end
@@ -40,6 +43,7 @@ shared_examples "voted" do
       it 'not saves the new vote in the database' do
         sign_in_the_user(user)
         expect { post :vote_positive, params: { id: votable }, format: :json }.to_not change(votable, :vote_rating)
+        expect(JSON.parse(response.body)['vote_rating']).to eq votable.vote_rating
       end
 
     end
@@ -62,6 +66,7 @@ shared_examples "voted" do
       it 'deletes the vote' do
         sign_in_the_user(voted_user)
         expect { post :vote_del, params: { id: votable }, format: :json }.to change(votable, :vote_rating).by(-1)
+        expect(JSON.parse(response.body)['vote_rating']).to eq votable.vote_rating
       end
 
     end
@@ -71,6 +76,7 @@ shared_examples "voted" do
 
       it 'not deletes the vote' do
         expect { post :vote_del, params: { id: votable }, format: :json }.to_not change(votable, :vote_rating)
+        expect(JSON.parse(response.body)['vote_rating']).to eq votable.vote_rating
       end
 
     end
