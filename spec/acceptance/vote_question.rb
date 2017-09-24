@@ -13,63 +13,63 @@ feature 'Vote question', %q{
   given! (:vote) { create(:vote, votable: question, user: user3, vote_type: 'positive') }
 
 
-  scenario 'Unauthenticated  user cant vote' do
+  scenario 'Unauthenticated  user cant vote', js:true do
     visit question_path(question)
     expect(page).to_not have_content "vote +1"
     expect(page).to_not have_content "vote -1"
-    expect(page).to have_content "raiting: 1"
+    expect(page).to have_content "rating: 1"
     expect(page).to_not have_content "delete vote"
   end
 
-  scenario 'Authenticated user cant vote for his question' do
+  scenario 'Authenticated user cant vote for his question', js:true do
     sign_in(user)
     visit question_path(question)
     expect(page).to_not have_content "vote +1"
     expect(page).to_not have_content "vote -1"
-    expect(page).to have_content "raiting: 1"
+    expect(page).to have_content "rating: 1"
     expect(page).to_not have_content "delete vote"
   end
 
-  scenario 'Authenticated user can vote for strangers question' do
+  scenario 'Authenticated user can vote for strangers question', js:true do
     sign_in(user2)
     visit question_path(question)
     expect(page).to have_content "vote +1"
     expect(page).to have_content "vote -1"
-    expect(page).to have_content "raiting: 1"
+    expect(page).to have_content "rating: 1"
     expect(page).to_not have_content "delete vote"
   end
 
-  scenario 'Authenticated user can vote positive for strangers question' do
+  scenario 'Authenticated user can vote positive for strangers question', js:true do
     sign_in(user2)
     visit question_path(question)
-    expect(page).to have_content "raiting: 0"
+    expect(page).to have_content "rating: 1"
     click_on "vote +1"
     expect(page).to_not have_content "vote +1"
     expect(page).to_not have_content "vote -1"
-    expect(page).to have_content "raiting: 1"
+    expect(page).to have_content "rating: 2"
     expect(page).to have_content "delete vote"
   end
 
-  scenario 'Authenticated user can vote negative for strangers question' do
+  scenario 'Authenticated user can vote negative for strangers question', js:true do
     sign_in(user2)
     visit question_path(question)
-    expect(page).to have_content "raiting: 1"
+    expect(page).to have_content "rating: 1"
     click_on "vote -1"
     expect(page).to_not have_content "vote +1"
     expect(page).to_not have_content "vote -1"
-    expect(page).to have_content "raiting: 0"
+    expect(page).to have_content "rating: 0"
     expect(page).to have_content "delete vote"
   end
 
-  scenario 'Authenticated user can revote for strangers question' do
+  scenario 'Authenticated user can revote for strangers question', js:true do
     sign_in(user3)
     visit question_path(question)
-    expect(page).to have_content "raiting: 1"
+    expect(page).to have_content "rating: 1"
     click_on "delete vote"
-    expect(page).to have_content "raiting: 0"
+    expect(page).to have_content "rating: 0"
     expect(page).to_not have_content "delete vote"
     click_on "vote -1"
-    expect(page).to have_content "raiting: -1"
+    expect(page).to have_content "rating: -1"
     expect(page).to have_content "delete vote"
   end
 end
