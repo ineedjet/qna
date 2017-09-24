@@ -6,6 +6,7 @@ div id="answer-#{answer.id}" class="#{ 'best panel-danger' if answer.best? }"
         p Attachments:
         ul
           = render answer.attachments
+      = render 'shared/vote_menu', votable: answer
     .panel-footer
       - if current_user&.author_of? @question
         => link_to 'Set best answer', set_best_answer_path(answer), method: :patch, remote: true, class: "delete-answer-link btn btn-primary btn-xs"
