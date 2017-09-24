@@ -1,11 +1,17 @@
 .btn-group.btn-group-xs.pull-right role="group"
   - if current_user && votable.can_vote?(current_user)
     => link_to 'vote +1', vote_positive_question_path(votable), method: :post, remote: true, data: { type: :json }, class: "btn btn-default vote_positive"
+  - else
+    => link_to 'vote +1', vote_positive_question_path(votable), method: :post, remote: true, data: {type: :json}, class: "btn btn-default vote_positive", style: "display: none"
 
   span class="btn btn-default vote_raiting" = "raiting: " + votable.vote_rating.to_s
 
   - if current_user && votable.can_vote?(current_user)
     => link_to 'vote -1', vote_negative_question_path(votable), method: :post, remote: true, class: "btn btn-default vote_positive"
+  - else
+    => link_to 'vote -1', vote_negative_question_path(votable), method: :post, remote: true, class: "btn btn-default vote_positive", style: "display: none"
 
   - if current_user && votable.vote_by(current_user)
     => link_to 'Delete vote', vote_del_question_path(votable), method: :post, remote: true, class: "btn btn-default vote_positive"
+  - else
+    => link_to 'Delete vote', vote_del_question_path(votable), method: :post, remote: true, class: "btn btn-default vote_positive", style: "display: none"
