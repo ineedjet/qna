@@ -9,8 +9,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :questions, concerns: :voted do
-    resources :answers do
+  resources :questions, concerns: [:voted], shallow: true do
+    resources :answers, concerns: [:voted] do
       patch 'set_best', on: :member
     end
   end

@@ -2,10 +2,10 @@ require 'rails_helper'
 
 shared_examples "voted" do
   let(:model) { described_class.controller_name.classify }
+  let!(:user) { create(:user) }
+  let!(:votable) { create(model.underscore.to_sym, user: user) }
 
   describe 'POST #vote' do
-    let!(:user) { create(:user) }
-    let!(:votable) { create(model.underscore.to_sym, user: user) }
 
     context "Not votable's author vote positive" do
       sign_in_user
@@ -57,9 +57,7 @@ shared_examples "voted" do
   end
 
   describe 'POST #vote_del' do
-    let(:user) { create(:user) }
     let(:voted_user) { create(:user) }
-    let!(:votable) { create(model.underscore.to_sym, user: user) }
     let!(:vote) { create(:vote, user: voted_user, votable: votable, vote_type: 'positive') }
 
     context 'user is the author of the vote' do
