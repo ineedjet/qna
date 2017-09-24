@@ -4,14 +4,13 @@ shared_examples_for 'votable' do
   it { should have_many(:votes).dependent(:destroy) }
   it { should accept_nested_attributes_for :votes }
 
-  context 'methods' do
-    let(:model) { described_class }
-    let(:user) { create(:user) }
-    let(:voted_user) { create(:user) }
-    let!(:votable) { create(model.to_s.underscore.to_sym, user: user) }
-    let!(:vote) { create(:vote, votable: votable, vote_type: 'positive', user: voted_user) }
-    let(:stranger_user) { create(:user) }
+  let(:user) { create(:user) }
+  let(:voted_user) { create(:user) }
+  let(:votable) { create(described_class.to_s.underscore.to_sym, user: user) }
+  let!(:vote) { create(:vote, votable: votable, vote_type: 'positive', user: voted_user) }
+  let(:stranger_user) { create(:user) }
 
+  context 'methods' do
     it '#vote_by' do
       expect(votable.vote_by(voted_user)).to eq vote
     end
