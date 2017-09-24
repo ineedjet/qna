@@ -8,12 +8,12 @@ div id="answer-#{answer.id}" class="#{ 'best panel-danger' if answer.best? }"
           = render answer.attachments
     .panel-footer
       - if current_user&.author_of? @question
-        => link_to 'Set best answer', set_best_question_answer_path(@question, answer), method: :patch, remote: true, class: "delete-answer-link btn btn-primary btn-xs"
+        => link_to 'Set best answer', set_best_answer_path(answer), method: :patch, remote: true, class: "delete-answer-link btn btn-primary btn-xs"
       - if current_user&.author_of? answer
-        => link_to 'Delete', [ @question, answer ], class: "delete-answer-link btn btn-primary btn-xs", data: { answer_id: answer.id }, method: :delete, title: "Delete answer", remote: true
+        => link_to 'Delete', answer, class: "delete-answer-link btn btn-primary btn-xs", data: { answer_id: answer.id }, method: :delete, title: "Delete answer", remote: true
         => link_to 'Edit', "", class: 'edit-answer-link btn btn-primary btn-xs', data: { answer_id: answer.id }
         p
-          =form_for [ @question, answer ], remote: true, html: { id: "edit-answer-#{answer.id}" }  do |f|
+          =form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" }  do |f|
             p = f.label :body, "Answer"
             p = f.text_area :body
             p = f.submit 'Save'
