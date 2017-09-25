@@ -10,7 +10,7 @@ feature 'Vote question', %q{
   given! (:user2) { create(:user) }
   given! (:question) { create(:question, user: user) }
   given! (:user3) { create(:user) }
-  given! (:vote) { create(:vote, votable: question, user: user3, vote_type: 'positive') }
+  given! (:vote) { create(:vote, votable: question, user: user3, vote_type: :positive) }
 
 
   scenario 'Unauthenticated  user cant vote', js:true do

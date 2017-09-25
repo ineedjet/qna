@@ -7,7 +7,7 @@ shared_examples_for 'votable' do
   let(:user) { create(:user) }
   let(:voted_user) { create(:user) }
   let(:votable) { create(described_class.to_s.underscore.to_sym, user: user) }
-  let!(:vote) { create(:vote, votable: votable, vote_type: 'positive', user: voted_user) }
+  let!(:vote) { create(:vote, votable: votable, vote_type: :positive, user: voted_user) }
   let(:stranger_user) { create(:user) }
 
   context 'methods' do
@@ -16,7 +16,7 @@ shared_examples_for 'votable' do
     end
 
     it '#vote!' do
-      expect { votable.vote!(user, 'positive') }.to change { Vote.count }.by(1)
+      expect { votable.vote!(user, :positive) }.to change { Vote.count }.by(1)
     end
 
     it '#vote_delete!' do
@@ -28,11 +28,11 @@ shared_examples_for 'votable' do
     end
 
     it 'change rating +1 if vote positive' do
-      expect { votable.vote!(user, 'positive') }.to change { votable.vote_rating }.by(1)
+      expect { votable.vote!(user, :positive) }.to change { votable.vote_rating }.by(1)
     end
 
     it 'change rating -1 if vote negative' do
-      expect { votable.vote!(user, 'negative') }.to change { votable.vote_rating }.by(-1)
+      expect { votable.vote!(user, :negative) }.to change { votable.vote_rating }.by(-1)
     end
 
     it 'change rating -1 if positive vote deleted' do

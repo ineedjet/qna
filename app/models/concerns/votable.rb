@@ -23,6 +23,6 @@ module Votable
   end
 
   def vote_rating
-    self.votes.where(vote_type: 'positive').count - self.votes.where(vote_type: 'negative').count
+    self.votes.where(vote_type: :positive).count - self.votes.where(vote_type: :negative).count
   end
 end

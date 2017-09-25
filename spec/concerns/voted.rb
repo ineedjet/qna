@@ -29,7 +29,7 @@ shared_examples "voted" do
 
     context "Not votable's author vote positive again" do
       let(:voted_user) { create(:user) }
-      let!(:vote) { create(:vote, user: voted_user, votable: votable, vote_type: 'positive') }
+      let!(:vote) { create(:vote, user: voted_user, votable: votable, vote_type: :positive) }
 
       it 'do not saves the new vote in the database' do
         sign_in_the_user(voted_user)
@@ -58,7 +58,7 @@ shared_examples "voted" do
 
   describe 'POST #vote_del' do
     let(:voted_user) { create(:user) }
-    let!(:vote) { create(:vote, user: voted_user, votable: votable, vote_type: 'positive') }
+    let!(:vote) { create(:vote, user: voted_user, votable: votable, vote_type: :positive) }
 
     context 'user is the author of the vote' do
       it 'deletes the vote' do
