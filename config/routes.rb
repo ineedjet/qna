@@ -1,8 +1,16 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  resources :questions do
-    resources :answers do
+  concern :voted do
+    member do
+      post :vote_positive
+      post :vote_negative
+      post :vote_del
+    end
+  end
+
+  resources :questions, concerns: [:voted], shallow: true do
+    resources :answers, concerns: [:voted] do
       patch 'set_best', on: :member
     end
   end

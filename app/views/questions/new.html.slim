@@ -1,17 +1,22 @@
-= form_for @question do |f|
-  - if @question.errors.any?
-    - @question.errors.full_messages.each do |msg|
-      p = msg
-  p
-    = f.label :title
-    = f.text_field :title
-  p
-    = f.label :body
-    = f.text_area :body
-    p
-      = f.fields_for :attachments do |attachment|
-        = render 'attachments/attachment_fields', f: attachment
-      .links
-        = link_to_add_association 'add file', f, :attachments, partial: 'attachments/attachment_fields'
-  p
-    = f.submit 'Create'
+.panel.panel-default
+  .panel-body
+    = form_for @question do |f|
+      p
+        = f.label :title
+      p
+        = f.text_field :title
+      p
+        = f.label :body
+      p
+        = f.text_area :body
+      .panel.panel-default
+          .panel-body
+            = f.fields_for :attachments do |attachment|
+              = render 'attachments/attachment_fields', f: attachment
+            .links
+              = link_to_add_association 'add file', f, :attachments, partial: 'attachments/attachment_fields'
+      - if @question.errors.any?
+        - @question.errors.full_messages.each do |msg|
+          p = msg
+      p
+        = f.submit 'Create', class: "btn btn-primary btn-md"
