@@ -8,12 +8,16 @@ class QuestionsController < ApplicationController
 
   def index
     @questions = Question.all
+
+    gon.page = 'questions_index'
   end
 
   def show
     @answer = Answer.new(question: @question)
     @answer.attachments.build
     @answers = @question.answers
+
+    gon.page = "question_#{@question.id}"
   end
 
   def new
@@ -56,7 +60,7 @@ class QuestionsController < ApplicationController
   def publish_question
     return if @question.errors.any?
     ActionCable.server.broadcast(
-        'questions', @question.title + '<br>' + @question.body
+        'questions', @question.to_json(include: [:attachments, :user], methods: :vote_rating)
     )
   end
 

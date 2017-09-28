@@ -1,0 +1,21 @@
+div id="question-#{@question.id}"
+  .panel.panel-primary
+    .panel-heading
+      a.question-link href="/questions/#{@question.id}" = @question.title
+      == JST['templates/vote_menu'] votable: @question, votable_type: 'questions'
+
+    .panel-body = @question.body
+    //- if current_user&.author_of? question
+      .panel-footer
+        => link_to 'Delete', question, :method => :delete, :title => "Delete question", class: "delete-answer-link btn btn-primary btn-xs"
+        => link_to 'Edit', "", class: 'edit-question-link delete-answer-link btn btn-primary btn-xs', data: {question_id: question.id}
+        p
+          = form_for question, remote: true, html: {id: "edit-question-#{question.id}"}  do |f|
+            p
+              = f.label :title, "Title"
+              = f.text_area :title
+            p
+              = f.label :body, "Body"
+              = f.text_area :body
+            p
+              = f.submit 'Save question'

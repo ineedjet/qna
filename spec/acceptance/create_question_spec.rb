@@ -42,7 +42,7 @@ feature 'Create question', %q{
   end
 
   context "multiply sessions" do
-    scenario "question appear in anower user page", js:true do
+    scenario "question appear in anower user index question page", js:true do
       Capybara.using_session('guest') do
         visit questions_path
 
@@ -68,5 +68,6 @@ feature 'Create question', %q{
         expect(page).to have_content "question body"
       end
     end
+
   end
 end
