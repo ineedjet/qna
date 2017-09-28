@@ -37,4 +37,41 @@ feature 'Create answer', %q{
 
     expect(page).to have_no_button 'Create answer'
   end
+
+  context "multiply sessions" do
+    given! (:question2) { create(:question, user: user) }
+
+    scenario "answer appear in anower user index question page", js:true do
+      Capybara.using_session('guest') do
+        visit question_path(question)
+
+        expect(page).to_not have_content "Test answer body"
+      end
+
+      Capybara.using_session('guest2') do
+        visit question_path(question2)
+
+        expect(page).to_not have_content "Test answer body"
+      end
+
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+
+        fill_in 'Body', with: 'Test answer body'
+        click_on 'Create answer'
+
+        expect(page).to have_content "Test answer body"
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content "Test answer body"
+      end
+
+      Capybara.using_session('guest2') do
+        expect(page).to_not have_content "Test answer body"
+      end
+    end
+
+  end
 end

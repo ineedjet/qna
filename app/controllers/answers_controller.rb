@@ -5,6 +5,8 @@ class AnswersController < ApplicationController
   before_action :load_question, only: [:create]
   before_action :load_answer_and_question, only: [:destroy, :update, :set_best]
 
+  after_action :publish_answer, only: :create
+
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
@@ -38,6 +40,13 @@ class AnswersController < ApplicationController
   end
 
   private
+
+  def publish_answer
+    return if @answer.errors.any?
+    ActionCable.server.broadcast(
+        "question-#{@answer.question.id}", @answer.to_json(include: [:attachments, :user], methods: :vote_rating)
+    )
+  end
 
   def load_question
     @question = Question.find(params[:question_id])

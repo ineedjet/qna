@@ -17,7 +17,8 @@ class QuestionsController < ApplicationController
     @answer.attachments.build
     @answers = @question.answers
 
-    gon.page = "question_#{@question.id}"
+    gon.page = "question"
+    gon.question = @question
   end
 
   def new
