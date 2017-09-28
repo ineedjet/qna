@@ -2,10 +2,12 @@ div id="answer-#{@answer.id}"
   .panel.panel-default
     .panel-body
       p = @answer.body
-      - if @answer.attachments.present?
+      - if @answer.attachments
         p Attachments:
         ul
-          //= render answer.attachments
+          - for attachment in @answer['attachments']
+            == JST['templates/attachment'] attachment: attachment
+
       == JST['templates/vote_menu'] votable: @answer, votable_type: 'answers'
     .panel-footer
       - if gon.current_user && gon.current_user.id == gon.question.user_id

@@ -59,17 +59,28 @@ feature 'Create answer', %q{
         visit question_path(question)
 
         fill_in 'Body', with: 'Test answer body'
+        attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+        click_on 'add file'
+        within all('.nested-fields').last do
+          attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
+        end
         click_on 'Create answer'
 
         expect(page).to have_content "Test answer body"
+        expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
+        expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
       end
 
       Capybara.using_session('guest') do
         expect(page).to have_content "Test answer body"
+        expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
+        expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
       end
 
       Capybara.using_session('guest2') do
         expect(page).to_not have_content "Test answer body"
+        expect(page).to_not have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
+        expect(page).to_not have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
       end
     end
 

@@ -1,0 +1,3 @@
+- str = @attachment['file'].url
+li id="attachment-#{@attachment.id}"
+  a href=str =decodeURI(str.substr(str.lastIndexOf('/')+1, str.length-1))
