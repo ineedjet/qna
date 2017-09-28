@@ -1,19 +1,14 @@
 .btn-group.btn-group-xs.pull-right role="group"
   - if gon.current_user && (@votable.user.id != gon.current_user.id)
-    //=> link_to 'vote +1', polymorphic_path(votable, action: :vote_positive), method: :post, remote: true, data: { type: :json }, class: "btn btn-default vote vote_positive"
     a data-type="json" class="btn btn-default vote vote_positive" data-remote="true" rel="nofollow" data-method="post" href="/#{@votable_type}/#{@votable.id}/vote_positive" vote +1
   - else
-    //=> link_to 'vote +1', polymorphic_path(votable, action: :vote_positive), method: :post, remote: true, data: {type: :json}, class: "btn btn-default vote vote_positive", style: "display: none"
     a data-type="json" class="btn btn-default vote vote_positive" data-remote="true" rel="nofollow" data-method="post" href="/#{@votable_type}/#{@votable.id}/vote_positive" style="display: none" vote +1
 
   span class="btn btn-default vote_raiting" = "rating: #{@votable.vote_rating}"
 
   - if gon.current_user && (@votable.user.id != gon.current_user.id)
-    //=> link_to 'vote -1', polymorphic_path(votable, action: :vote_negative), method: :post, remote: true, data: { type: :json }, class: "btn btn-default vote vote_negative"
     a data-type="json" class="btn btn-default vote vote_negative" data-remote="true" rel="nofollow" data-method="post" href="/#{@votable_type}/#{@votable.id}/vote_negative" vote -1
   - else
-    //=> link_to 'vote -1', polymorphic_path(votable, action: :vote_negative), method: :post, remote: true, data: { type: :json }, class: "btn btn-default vote vote_negative", style: "display: none"
     a data-type="json" class="btn btn-default vote vote_negative" data-remote="true" rel="nofollow" data-method="post" href="/#{@votable_type}/#{@votable.id}/vote_negative" style="display: none" vote -1
 
-  //=> link_to 'delete vote', polymorphic_path(votable, action: :vote_del), method: :post, remote: true, data: { type: :json }, class: "btn btn-danger vote_delete", style: "display: none"
   a data-type="json" class="btn btn-danger vote vote_delete" data-remote="true" rel="nofollow" data-method="post" href="/#{@votable_type}/#{@votable.id}/vote_del" style="display: none" delete vote
