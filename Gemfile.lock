@@ -94,6 +94,11 @@ GEM
     ffi (1.9.18)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
+    gon (6.1.0)
+      actionpack (>= 3.0)
+      json
+      multi_json
+      request_store (>= 1.0)
     i18n (0.8.6)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
@@ -168,6 +173,7 @@ GEM
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
     remotipart (1.3.1)
+    request_store (1.3.2)
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
@@ -199,6 +205,11 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
+    skim (0.10.0)
+      coffee-script
+      coffee-script-source (>= 1.2.0)
+      slim (>= 3.0)
+      sprockets (>= 2, < 4)
     slim (3.0.8)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 1.3.3, < 2.1)
@@ -223,9 +234,6 @@ GEM
     thor (0.20.0)
     thread_safe (0.3.6)
     tilt (2.0.8)
-    turbolinks (5.0.1)
-      turbolinks-source (~> 5)
-    turbolinks-source (5.0.3)
     twitter-bootstrap-rails (4.0.0)
       actionpack (~> 5.0, >= 5.0.1)
       execjs (~> 2.7)
@@ -260,6 +268,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   devise
   factory_girl_rails
+  gon
   jbuilder (~> 2.5)
   jquery-rails
   launchy
@@ -271,11 +280,11 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 5.0)
   shoulda-matchers!
+  skim
   slim-rails
   spring
   spring-watcher-listen (~> 2.0.0)
   sqlite3
-  turbolinks (~> 5)
   twitter-bootstrap-rails
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)
