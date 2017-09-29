@@ -9,13 +9,21 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :questions, concerns: [:voted], shallow: true do
+  concern :commented do
+    member do
+      post :comment
+    end
+  end
+
+  resources :questions, concerns: [:voted, :commented], shallow: true do
     resources :answers, concerns: [:voted] do
       patch 'set_best', on: :member
     end
   end
 
   resources :attachments, only: :destroy
+
+  resources :comments, only: [:update, :destroy]
 
   root to: "questions#index"
 
