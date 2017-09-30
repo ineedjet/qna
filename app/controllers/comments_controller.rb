@@ -1,8 +1,22 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_comment
+  before_action :load_comment, only: [:update, :destroy]
+  before_action :load_commentable, only: [:create]
 
   after_action :publish_comment, only: :create
+
+  def create
+    @comment = @commentable.comments.new(comment_params)
+    @comment.user = current_user
+
+    if @comment.save
+      flash[:notice] = 'Your comment successfully created'
+    else
+      flash[:notice] = 'Your comment has a problem'
+    end
+
+    render 'comments/create'
+  end
 
   def update
     if current_user.author_of? @comment
@@ -20,6 +34,18 @@ class CommentsController < ApplicationController
 
 
   private
+
+  def load_commentable
+    @commentable = commentable_name.classify.constantize.find(params[commentable_id])
+  end
+
+  def commentable_name
+    params[:commentable]
+  end
+
+  def commentable_id
+    (commentable_name.classify.downcase + '_id').to_sym
+  end
 
   def publish_comment
     #return if @answer.errors.any?

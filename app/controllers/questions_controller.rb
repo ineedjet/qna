@@ -19,6 +19,8 @@ class QuestionsController < ApplicationController
     @answer.attachments.build
     @answers = @question.answers
 
+    @comment = Comment.new(commentable: @question)
+
     gon.page = "question"
     gon.question = @question
   end

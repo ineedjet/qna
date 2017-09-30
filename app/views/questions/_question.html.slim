@@ -3,7 +3,24 @@ div id="question-#{question.id}"
     .panel-heading
       = link_to question.title, question, class: "question-link"
       = render 'shared/vote_menu', votable: question
-    .panel-body = question.body
+    .panel-body
+      p = question.body
+      .comments
+        p Comments:
+        = render @question.comments
+        .new-comment
+          = form_for [@question, @question.comments.build], :html => {:class => "display"}, remote: true do |f|
+            - if @comment.errors.any?
+              - @comment.errors.full_messages.each do |msg|
+                p = msg
+            p
+              = f.label :body
+            p
+              = f.text_area :body
+
+            = f.submit 'Create comment', class: "btn btn-primary btn-xs"
+            .errors
+
     - if current_user&.author_of? question
       .panel-footer
         => link_to 'Delete', question, :method => :delete, :title => "Delete question", class: "delete-answer-link btn btn-primary btn-xs"
