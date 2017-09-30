@@ -5,6 +5,10 @@ div id="Question-#{question.id}"
       = render 'shared/vote_menu', votable: question
     .panel-body
       p = question.body
+      - if question.attachments.present?
+        p Attachments:
+        ul
+          = render question.attachments
       .comments
         p Comments:
         = render question.comments
