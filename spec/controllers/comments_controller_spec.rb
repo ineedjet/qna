@@ -7,7 +7,7 @@ RSpec.describe CommentsController, type: :controller do
   let!(:comment) { create(:comment, commentable: question, user: user) }
   let!(:comment2) { create(:comment, commentable: question, user: user2) }
 
-  describe 'POST #create by user' do
+  describe 'POST #create by user (for question)' do
     before{ sign_in_the_user(user) }
 
     context 'with valid attributes' do
@@ -39,10 +39,54 @@ RSpec.describe CommentsController, type: :controller do
 
   end
 
-  describe 'POST #create by anonymous' do
+  describe 'POST #create by anonymous (for question)' do
     context 'with valid attributes' do
       it 'saves the new comment in the database with commentsble association' do
         expect { post :create, params: { question_id: question.id, commentable: 'question', comment: attributes_for(:comment) }, format: :js }.to_not change(question.comments, :count)
+      end
+    end
+  end
+
+  describe 'POST #create by user (for answer)' do
+    let!(:answer) { create(:answer, question: question, user: user) }
+
+    before{ sign_in_the_user(user) }
+
+    context 'with valid attributes' do
+      it 'saves the new comment in the database with commentsble association' do
+        expect { post :create, params: { answer_id: answer.id, commentable: 'answer', comment: attributes_for(:comment) }, format: :js }.to change(answer.comments, :count).by(1)
+      end
+
+      it 'render create template' do
+        post :create, params: { answer_id: answer.id, commentable: 'answer', comment: attributes_for(:comment)  }, format: :js
+        expect(response).to render_template 'comments/create'
+      end
+
+      it 'check user is author' do
+        post :create, params: { answer_id: answer.id, commentable: 'answer', comment: attributes_for(:comment)  }, format: :js
+        expect(assigns(:comment).user).to eq user
+      end
+
+      it 'check commentable is commentable' do
+        post :create, params: { answer_id: question.id, commentable: 'answer', comment: attributes_for(:comment)  }, format: :js
+        expect(assigns(:comment).commentable).to eq answer
+      end
+    end
+
+    context 'with invalid attributes' do
+      it 'does not saves the answer in database' do
+        expect { post :create, params: { answer_id: answer.id, commentable: "answer", comment: attributes_for(:invalid_comment) }, format: :js }.to_not change(Comment, :count)
+      end
+    end
+
+  end
+
+  describe 'POST #create by anonymous (for answer)' do
+    let!(:answer) { create(:answer, question: question, user: user) }
+
+    context 'with valid attributes' do
+      it 'saves the new comment in the database with commentsble association' do
+        expect { post :create, params: { answer_id: answer.id, commentable: 'answer', comment: attributes_for(:comment) }, format: :js }.to_not change(answer.comments, :count)
       end
     end
   end
