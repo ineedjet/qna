@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-feature 'Create answer', %q{
+feature 'Create comment for question', %q{
   In order to put answer
   As an authenticated user
-  I want to be able to put answer for question
+  I want to be able to put comment for question
 } do
 
   given! (:user) { create(:user) }
