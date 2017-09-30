@@ -1,4 +1,4 @@
-div id="question-#{question.id}"
+div id="Question-#{question.id}"
   .panel.panel-primary
     .panel-heading
       = link_to question.title, question, class: "question-link"
@@ -7,12 +7,11 @@ div id="question-#{question.id}"
       p = question.body
       .comments
         p Comments:
-        = render @question.comments
-        .new-comment
-          = form_for [@question, @question.comments.build], :html => {:class => "display"}, remote: true do |f|
-            - if @comment.errors.any?
-              - @comment.errors.full_messages.each do |msg|
-                p = msg
+        = render question.comments
+      - if current_user
+        .new_comment
+          = form_for [question, question.comments.build], :html => {:class => "display"}, remote: true do |f|
+            = hidden_field_tag :commentable, 'question'
             p
               = f.label :body
             p

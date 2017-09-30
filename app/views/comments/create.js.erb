@@ -1,0 +1,8 @@
+$('.notice').html('<%= j render 'shared/notice' %>');
+<% if @comment.errors.any? %>
+$('.new_comment .errors').html("<%= @comment.errors.full_messages.join('<br>') %>");
+<% else %>
+$('textarea#comment_body').val('');
+$('#<%=@comment.commentable_type%>-<%=@comment.commentable_id%> .comments').append('<%= j render @comment %>');
+$('#new_answer .nested-fields').remove();
+<% end %>

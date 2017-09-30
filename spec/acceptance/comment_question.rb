@@ -14,15 +14,14 @@ feature 'Create answer', %q{
 
     visit questions_path
     click_on question.title
-    within '.comments' do
-      within '.new-comment' do
+    within "#Question-#{question.id}" do
+      within '.new_comment' do
         fill_in 'Body', with: 'Test answer body text text text text'
         click_on 'Create comment'
       end
-
-      expect(page).to have_content 'Your comment successfully created'
       expect(page).to have_content 'Test answer body text text text text'
     end
+    expect(page).to have_content 'Your comment successfully created'
 
   end
 
@@ -31,9 +30,10 @@ feature 'Create answer', %q{
 
     visit questions_path
     click_on question.title
-    within '.comments' do
-      click_on 'Create comment'
-
+    within "#Question-#{question.id}" do
+      within '.new_comment' do
+        click_on 'Create comment'
+      end
       expect(page).to have_content 'Body can\'t be blank'
       end
   end
