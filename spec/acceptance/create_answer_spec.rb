@@ -14,8 +14,10 @@ feature 'Create answer', %q{
 
     visit questions_path
     click_on question.title
-    fill_in 'Body', with: 'Test answer body text text text text'
-    click_on 'Create answer'
+    within '.new_answer' do
+      fill_in 'Body', with: 'Test answer body text text text text'
+      click_on 'Create answer'
+    end
 
     expect(page).to have_content 'Your answer successfully created'
     expect(page).to have_content 'Test answer body text text text text'
@@ -58,13 +60,15 @@ feature 'Create answer', %q{
         sign_in(user)
         visit question_path(question)
 
-        fill_in 'Body', with: 'Test answer body'
-        attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
-        click_on 'add file'
-        within all('.nested-fields').last do
-          attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
+        within '.new_answer' do
+          fill_in 'Body', with: 'Test answer body'
+          attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+          click_on 'add file'
+          within all('.nested-fields').last do
+            attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
+          end
+          click_on 'Create answer'
         end
-        click_on 'Create answer'
 
         expect(page).to have_content "Test answer body"
         expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
