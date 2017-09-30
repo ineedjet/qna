@@ -21,6 +21,7 @@ class QuestionsController < ApplicationController
 
     gon.page = "question"
     gon.question = @question
+    gon.answers = @question.answers
   end
 
   def new

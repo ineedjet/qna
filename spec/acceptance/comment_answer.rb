@@ -66,10 +66,10 @@ feature 'Create comment for answer', %q{
       end
 
       Capybara.using_session('guest') do
-        within "#Question-#{answer.id}" do
+        within "#Answer-#{answer.id}" do
           expect(page).to have_content "Test comment body"
         end
-        within "#Question-#{answer2.id}" do
+        within "#Answer-#{answer2.id}" do
           expect(page).to_not have_content "Test comment body"
         end
       end

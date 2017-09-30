@@ -33,16 +33,3 @@ $ ->
             $(this).parent().find(".vote").show()
             $(this).parent().find(".vote_delete").hide()
     })
-
-    App.cable.subscriptions.create({
-      channel: 'CommentsChannel'
-    },{
-      connected: ->
-        @perform 'follow', question_id: gon.question.id
-      ,
-
-      received: (data) ->
-        comment = JSON.parse(data)
-        if !gon.current_user || (answer.user_id != gon.current_user.id)
-          $("#Question-#{comment.commentable_id} .comments").append( JST['templates/comment']({ comment: comment }) )
-    })
