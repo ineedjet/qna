@@ -64,16 +64,19 @@ feature 'Create answer', %q{
       Capybara.using_session('user') do
         sign_in(user)
         visit question_path(question)
-
-        fill_in 'Body', with: 'Test comment body'
-
-        click_on 'Create comment'
-
-        expect(page).to have_content "Test comment body"
+        within "#Question-#{question.id}" do
+          within '.new_comment' do
+            fill_in 'Body', with: 'Test comment body'
+            click_on 'Create comment'
+          end
+          expect(page).to have_content "Test comment body"
+        end
       end
 
       Capybara.using_session('guest') do
-        expect(page).to have_content "Test comment body"
+        within "#Question-#{question.id}" do
+          expect(page).to have_content "Test comment body"
+        end
       end
 
       Capybara.using_session('guest2') do

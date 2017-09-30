@@ -48,10 +48,10 @@ class CommentsController < ApplicationController
   end
 
   def publish_comment
-    #return if @answer.errors.any?
-    #ActionCable.server.broadcast(
-    #    "question-#{@answer.question.id}", @answer.to_json(include: [:attachments, :user], methods: :vote_rating)
-    #)
+    return if @comment.errors.any?
+    ActionCable.server.broadcast(
+        "comments-#{@comment.commentable_type}-#{@comment.commentable_id}", @comment.to_json
+    )
   end
 
   def load_comment
