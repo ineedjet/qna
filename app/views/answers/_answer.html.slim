@@ -1,4 +1,4 @@
-div id="answer-#{answer.id}" class="#{ 'best panel-danger' if answer.best? }"
+div id="Answer-#{answer.id}" class="#{ 'best panel-danger' if answer.best? }"
   .panel.panel-default
     .panel-body
       p = answer.body
@@ -6,6 +6,23 @@ div id="answer-#{answer.id}" class="#{ 'best panel-danger' if answer.best? }"
         p Attachments:
         ul
           = render answer.attachments
+
+      .comments
+        p Comments:
+        = render answer.comments
+
+      - if current_user
+        .new_comment
+          = form_for [answer, answer.comments.build], :html => {:class => "display"}, remote: true do |f|
+            = hidden_field_tag :commentable, 'answer'
+            p
+              = f.label :body
+            p
+              = f.text_area :body
+
+            = f.submit 'Create comment', class: "btn btn-primary btn-xs"
+            .errors
+
       = render 'shared/vote_menu', votable: answer
     .panel-footer
       - if current_user&.author_of? @question
