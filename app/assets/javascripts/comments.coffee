@@ -9,10 +9,7 @@ $ ->
       channel: 'CommentsChannel'
     },{
       connected: ->
-        @perform 'follow', commentable_type: "Question", commentable_id: gon.question.id
-        for key, answer of gon.answers
-          console.log 'Connected to Answer | ' + answer.id + ' | ' + answer.body
-          @perform 'follow', commentable_type: "Answer", commentable_id: answer.id
+        @perform 'follow', question: gon.question.id
       ,
 
       received: (data) ->
