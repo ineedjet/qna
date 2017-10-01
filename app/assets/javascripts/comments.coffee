@@ -3,7 +3,7 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $ ->
-  if gon.page == 'question'
+  if gon.question
 
     App.cable.subscriptions.create({
       channel: 'CommentsChannel'

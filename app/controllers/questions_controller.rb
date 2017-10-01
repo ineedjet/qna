@@ -9,7 +9,6 @@ class QuestionsController < ApplicationController
   def index
     @questions = Question.all
 
-    gon.page = 'questions_index'
   end
 
   def show
@@ -19,7 +18,6 @@ class QuestionsController < ApplicationController
 
     @comment = Comment.new(commentable: @question)
 
-    gon.page = "question"
     gon.question = @question
     gon.answers = @question.answers
   end

@@ -17,7 +17,7 @@ $ ->
     received: (data) ->
       new_question = $.parseJSON(data)
       if !gon.current_user || (gon.current_user.id != new_question.user.id)
-        if gon.page == 'questions_index'
+        if ( $('.questions-list').length  > 0 )
           $('.questions-list').append(JST['templates/question']({
             question: new_question
           }))

@@ -9,7 +9,7 @@ $ ->
     answer_id = $(this).data('answerId')
     $('form#edit-answer-' + answer_id).show()
 
-  if gon.page == 'question'
+  if gon.question
     App.cable.subscriptions.create({
       channel: 'AnswersChannel'
     },{
