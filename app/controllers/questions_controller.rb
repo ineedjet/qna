@@ -30,9 +30,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user.author_of? @question
-      respond_with @question.update(question_params)
-    end
+    respond_with @question.update(question_params) if current_user.author_of? @question
   end
 
   def destroy
