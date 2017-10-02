@@ -17,7 +17,7 @@ feature 'Delete question', %q{
     visit question_path question
     click_on "Delete question"
 
-    expect(page).to have_content 'Your question successfully deleted'
+    expect(page).to have_content 'Your Question successfully deleted'
     expect(page).to have_no_content question.title
   end
 
