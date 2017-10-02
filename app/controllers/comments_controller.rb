@@ -5,31 +5,18 @@ class CommentsController < ApplicationController
 
   after_action :publish_comment, only: :create
 
+  respond_to :js
+
   def create
-    @comment = @commentable.comments.new(comment_params)
-    @comment.user = current_user
-
-    if @comment.save
-      flash[:notice] = 'Your comment successfully created'
-    else
-      flash[:notice] = 'Your comment has a problem'
-    end
-
-    render 'comments/create'
+    respond_with(@comment = @commentable.comments.create(comment_params))
   end
 
   def update
-    if current_user.author_of? @comment
-      flash[:notice] = 'Your comment successfully updated'
-      @comment.update(comment_params)
-    end
+    respond_with(@comment.update(comment_params)) if current_user.author_of? @comment
   end
 
   def destroy
-    if current_user.author_of? @comment
-      flash[:notice] = 'Your comment successfully deleted'
-      @comment.destroy
-    end
+    respond_with(@comment.destroy) if current_user.author_of? @comment
   end
 
 
@@ -65,6 +52,6 @@ class CommentsController < ApplicationController
 
 
   def comment_params
-    params.require(:comment).permit(:body)
+    params.require(:comment).permit(:body).merge(user_id: current_user.id)
   end
 end
