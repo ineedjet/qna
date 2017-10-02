@@ -6,8 +6,6 @@ class QuestionsController < ApplicationController
   before_action :build_answer, only: :show
   after_action :publish_question, only: :create
 
-  respond_to :html
-
   def index
     respond_with(@questions = Question.all)
   end
@@ -30,10 +28,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = current_user.questions.new(question_params)
-
-    flash[:notice] = 'Your question successfully created' if @question.save
-    respond_with(@question)
+     respond_with(@question = current_user.questions.create(question_params))
   end
 
   def update

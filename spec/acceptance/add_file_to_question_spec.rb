@@ -26,6 +26,6 @@ feature 'Add filr to question', %q{
     expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
     expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
 
-    expect(page).to have_content 'Your question successfully created'
+    expect(page).to have_content 'Your Question successfully created'
   end
 end
