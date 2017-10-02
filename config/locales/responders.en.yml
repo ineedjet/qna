@@ -14,3 +14,5 @@ en:
     answers:
       set_best:
         notice: 'Answer successfully set best'
+      create:
+        alert: 'Your answer has a problem'

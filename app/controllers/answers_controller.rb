@@ -9,14 +9,7 @@ class AnswersController < ApplicationController
   respond_to :js
 
   def create
-    @answer = @question.answers.new(answer_params)
-    @answer.user = current_user
-
-    if @answer.save
-      flash[:notice] = 'Your answer successfully created'
-    else
-      flash[:notice] = 'Your answer has a problem'
-    end
+    respond_with(@answer = @question.answers.create(answer_params))
   end
 
   def update
@@ -50,6 +43,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, attachments_attributes: [:file])
+    params.require(:answer).permit(:body, attachments_attributes: [:file]).merge(user_id: current_user.id)
   end
 end
