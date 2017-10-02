@@ -17,7 +17,7 @@ feature 'Set best answer', %q{
 
     visit questions_path
     click_on question.title
-    within "#answer-#{answer2.id}" do
+    within "#Answer-#{answer2.id}" do
       click_on "Set best answer"
     end
     expect(page).to have_content 'Answer successfully set best'
@@ -29,7 +29,7 @@ feature 'Set best answer', %q{
 
     visit questions_path
     click_on question.title
-    within "#answer-#{answer.id}" do
+    within "#Answer-#{answer.id}" do
       click_on "Set best answer"
     end
     expect(page).to have_content 'Answer successfully set best'

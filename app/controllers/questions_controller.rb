@@ -4,14 +4,22 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
 
+  after_action :publish_question, only: :create
+
   def index
     @questions = Question.all
+
   end
 
   def show
     @answer = Answer.new(question: @question)
     @answer.attachments.build
     @answers = @question.answers
+
+    @comment = Comment.new(commentable: @question)
+
+    gon.question = @question
+    gon.answers = @question.answers
   end
 
   def new
@@ -50,6 +58,13 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def publish_question
+    return if @question.errors.any?
+    ActionCable.server.broadcast(
+        'questions', @question.to_json(include: [:attachments, :user], methods: :vote_rating)
+    )
+  end
 
   def load_question
     @question = Question.find(params[:id])

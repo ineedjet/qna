@@ -1,0 +1,7 @@
+div id="question-#{@question.id}"
+  .panel.panel-primary
+    .panel-heading
+      a.question-link href="/questions/#{@question.id}" = @question.title
+      == JST['templates/vote_menu'] votable: @question, votable_type: 'questions'
+
+    .panel-body = @question.body

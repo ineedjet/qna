@@ -1,0 +1,14 @@
+.btn-group.btn-group-xs.pull-right role="group"
+  - if gon.current_user && (@votable.user.id != gon.current_user.id)
+    a data-type="json" class="btn btn-default vote vote_positive" data-remote="true" rel="nofollow" data-method="post" href="/#{@votable_type}/#{@votable.id}/vote_positive" vote +1
+  - else
+    a data-type="json" class="btn btn-default vote vote_positive" data-remote="true" rel="nofollow" data-method="post" href="/#{@votable_type}/#{@votable.id}/vote_positive" style="display: none" vote +1
+
+  span class="btn btn-default vote_raiting" = "rating: #{@votable.vote_rating}"
+
+  - if gon.current_user && (@votable.user.id != gon.current_user.id)
+    a data-type="json" class="btn btn-default vote vote_negative" data-remote="true" rel="nofollow" data-method="post" href="/#{@votable_type}/#{@votable.id}/vote_negative" vote -1
+  - else
+    a data-type="json" class="btn btn-default vote vote_negative" data-remote="true" rel="nofollow" data-method="post" href="/#{@votable_type}/#{@votable.id}/vote_negative" style="display: none" vote -1
+
+  a data-type="json" class="btn btn-danger vote vote_delete" data-remote="true" rel="nofollow" data-method="post" href="/#{@votable_type}/#{@votable.id}/vote_del" style="display: none" delete vote

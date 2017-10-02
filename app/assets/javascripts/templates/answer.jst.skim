@@ -1,0 +1,14 @@
+div id="answer-#{@answer.id}"
+  .panel.panel-default
+    .panel-body
+      p = @answer.body
+      - if @answer.attachments
+        p Attachments:
+        ul
+          - for attachment in @answer['attachments']
+            == JST['templates/attachment'] attachment: attachment
+
+      == JST['templates/vote_menu'] votable: @answer, votable_type: 'answers'
+    .panel-footer
+      - if gon.current_user && gon.current_user.id == gon.question.user_id
+        a.set-best-answer-link.btn.btn-primary.btn-xs data-remote="true" rel="nofollow" data-method="patch" href="/answers/#{@answer.id}/set_best" Set best answer

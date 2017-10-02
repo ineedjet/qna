@@ -18,6 +18,8 @@ RSpec.describe Answer, type: :model do
     let!(:votable) { create(:answer, question: question, user: user) }
   end
 
+  it_behaves_like 'commentable'
+
   context 'set best' do
     let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }

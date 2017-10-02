@@ -15,13 +15,15 @@ feature 'Add file to answer', %q{
   end
 
   scenario 'User can add many files when answering', js: true do
-    fill_in 'Body', with: 'answer body'
-    attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
-    click_on 'add file'
-    within all('.nested-fields').last do
-      attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
+    within '.new_answer' do
+      fill_in 'Body', with: 'answer body'
+      attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+      click_on 'add file'
+      within all('.nested-fields').last do
+        attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
+      end
+      click_on 'Create answer'
     end
-    click_on 'Create answer'
 
     within '.answers' do
       expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'

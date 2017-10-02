@@ -27,17 +27,19 @@ feature 'Edit question', %q{
       question_body_old = question.body
       question_title_old = question.title
       click_on 'Edit'
-      within '.question' do
+      within '.edit_question' do
         fill_in 'Title', with: 'edited question title'
         fill_in 'Body', with: 'edited question body'
         click_on 'Save question'
-
-        expect(page).to have_content 'edited question title'
-        expect(page).to have_content 'edited question body'
-        expect(page).to_not have_content question_body_old
-        expect(page).to_not have_content question_title_old
-        expect(page).to_not have_selector 'textarea'
       end
+
+      expect(page).to have_content 'edited question title'
+      expect(page).to have_content 'edited question body'
+      expect(page).to_not have_content question_body_old
+      expect(page).to_not have_content question_title_old
+      expect(page).to_not have_selector '.edit_question'
+
+
     end
 
   end
