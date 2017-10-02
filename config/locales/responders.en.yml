@@ -18,3 +18,11 @@ en:
         notice: 'Your %{resource_name} successfully deleted'
       update:
         notice: 'Your %{resource_name} successfully updated'
+
+    answers:
+      destroy:
+        notice: 'Your %{resource_name} successfully deleted'
+      update:
+        notice: 'Your %{resource_name} successfully updated'
+      set_best:
+        notice: 'Answer successfully set best'

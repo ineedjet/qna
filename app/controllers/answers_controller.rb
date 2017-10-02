@@ -4,8 +4,9 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:create]
   before_action :load_answer_and_question, only: [:destroy, :update, :set_best]
-
   after_action :publish_answer, only: :create
+
+  respond_to :js
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -19,24 +20,15 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if current_user.author_of? @answer
-      flash[:notice] = 'Your answer successfully updated'
-      @answer.update(answer_params)
-    end
+    respond_with @answer.update(answer_params) if current_user.author_of? @answer
   end
 
   def destroy
-    if current_user.author_of? @answer
-      flash[:notice] = 'Your answer successfully deleted'
-      @answer.destroy
-    end
+    respond_with(@answer.destroy) if current_user.author_of? @answer
   end
 
   def set_best
-    if current_user.author_of? @answer.question
-      flash[:notice] = 'Answer successfully set best'
-      @answer.set_best
-    end
+    respond_with(@answer.set_best) if current_user.author_of? @answer.question
   end
 
   private
