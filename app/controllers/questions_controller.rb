@@ -3,28 +3,27 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
-
+  before_action :build_answer, only: :show
   after_action :publish_question, only: :create
 
-  def index
-    @questions = Question.all
+  respond_to :html
 
+  def index
+    respond_with(@questions = Question.all)
   end
 
   def show
-    @answer = Answer.new(question: @question)
-    @answer.attachments.build
     @answers = @question.answers
-
     @comment = Comment.new(commentable: @question)
 
     gon.question = @question
     gon.answers = @question.answers
+
+    respond_with(@question)
   end
 
   def new
-    @question = Question.new
-    @question.attachments.build
+    respond_with(@question = Question.new)
   end
 
   def edit
@@ -33,12 +32,8 @@ class QuestionsController < ApplicationController
   def create
     @question = current_user.questions.new(question_params)
 
-    if @question.save
-      flash[:notice] = 'Your question successfully created'
-      redirect_to @question
-    else
-      render :new
-    end
+    flash[:notice] = 'Your question successfully created' if @question.save
+    respond_with(@question)
   end
 
   def update
@@ -58,6 +53,10 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def build_answer
+    @answer = Answer.new(question: @question)
+  end
 
   def publish_question
     return if @question.errors.any?
