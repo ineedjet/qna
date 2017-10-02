@@ -4,6 +4,7 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
   before_action :build_answer, only: :show
+  before_action :gon_question, only: :show
   after_action :publish_question, only: :create
 
   respond_to :js
@@ -13,12 +14,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @answers = @question.answers
     @comment = Comment.new(commentable: @question)
-
-    gon.question = @question
-    gon.answers = @question.answers
-
     respond_with(@question)
   end
 
@@ -44,6 +40,11 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def gon_question
+    gon.question = @question
+    gon.answers = @question.answers
+  end
 
   def build_answer
     @answer = Answer.new(question: @question)

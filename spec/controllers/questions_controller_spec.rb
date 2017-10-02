@@ -41,10 +41,6 @@ RSpec.describe QuestionsController, type: :controller do
     it 'assigns the new answer to question' do
       expect(assigns(:answer).question).to eq question
     end
-
-    it 'assigns the answers to @answers' do
-      expect(assigns(:answers)).to match_array(answers)
-    end
   end
 
   describe 'GET #new' do
