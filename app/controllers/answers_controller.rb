@@ -3,7 +3,7 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:create]
-  before_action :load_answer_and_question, only: [:destroy, :update, :set_best]
+  before_action :load_answer, only: [:destroy, :update, :set_best]
   after_action :publish_answer, only: :create
 
   respond_to :js
@@ -37,9 +37,8 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
   end
 
-  def load_answer_and_question
+  def load_answer
     @answer = Answer.find(params[:id])
-    @question = @answer.question
   end
 
   def answer_params
