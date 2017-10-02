@@ -6,6 +6,8 @@ class QuestionsController < ApplicationController
   before_action :build_answer, only: :show
   after_action :publish_question, only: :create
 
+  respond_to :js
+
   def index
     respond_with(@questions = Question.all)
   end
@@ -33,8 +35,7 @@ class QuestionsController < ApplicationController
 
   def update
     if current_user.author_of? @question
-      flash[:notice] = 'Your question successfully updated'
-      @question.update(question_params)
+      respond_with @question.update(question_params)
     end
   end
 

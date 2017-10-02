@@ -16,3 +16,5 @@ en:
         notice: 'Your %{resource_name} successfully created'
       destroy:
         notice: 'Your %{resource_name} successfully deleted'
+      update:
+        notice: 'Your %{resource_name} successfully updated'
