@@ -22,7 +22,7 @@ feature 'Delete answer', %q{
       expect(page).to have_no_content question_attachment.file.file.filename
     end
 
-    expect(page).to have_content 'Your attachment successfully deleted'
+    expect(page).to have_content 'Your Attachment successfully deleted'
     expect(page).to have_content question.title
     expect(page).to have_content question.body
     expect(current_path).to eq question_path(question)
@@ -53,7 +53,7 @@ feature 'Delete answer', %q{
       expect(page).to have_no_content answer_attachment.file.file.filename
     end
 
-    expect(page).to have_content 'Your attachment successfully deleted'
+    expect(page).to have_content 'Your Attachment successfully deleted'
     expect(page).to have_content answer.body
     expect(current_path).to eq question_path(question)
   end

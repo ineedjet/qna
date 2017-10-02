@@ -16,3 +16,7 @@ en:
         notice: 'Answer successfully set best'
       create:
         alert: 'Your answer has a problem'
+
+    attachment:
+      destroy:
+        alert: 'Premission for attachment denied'
