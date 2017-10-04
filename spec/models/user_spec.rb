@@ -44,7 +44,7 @@ RSpec.describe User do
           expect{ User.find_for_oauth(auth) }.to change(user.authorizations, :count).by(1)
         end
 
-        it 'create autorization with provider and id' do
+        it 'create autorization with provider and uid' do
           user = User.find_for_oauth(auth)
           authorization = user.authorizations.first
 
@@ -57,6 +57,36 @@ RSpec.describe User do
         end
 
       end
+    end
+
+    context 'user has not exist' do
+      let(:auth){ OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456', info: { email: 'new@email.com' }) }
+
+       it 'creates new user' do
+         expect{ User.find_for_oauth(auth) }.to change(User, :count).by(1)
+       end
+
+       it 'return new user' do
+         expect(User.find_for_oauth(auth)).to be_a(User)
+       end
+
+       it 'user use email'do
+         user = User.find_for_oauth(auth)
+         expect(user.email).to eq auth.info.email
+       end
+
+       it 'create autorization for user' do
+         user = User.find_for_oauth(auth)
+         expect(user.authorizations).to_not be_empty
+       end
+
+        it 'create autorization with provider and uid' do
+          authorization = User.find_for_oauth(auth).authorizations.first
+
+          expect(authorization.provider).to eq auth.provider
+          expect(authorization.uid).to eq auth.uid
+        end
+
     end
   end
 end
