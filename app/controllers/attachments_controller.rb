@@ -2,13 +2,10 @@ class AttachmentsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_attachment
 
+  respond_to :js, only: :destroy
+
   def destroy
-    if current_user.author_of? @attachment.attachable
-      flash[:notice] = 'Your attachment successfully deleted'
-      @attachment.destroy
-    else
-      flash[:notice] = 'Premission for attachment denied'
-    end
+    respond_with(@attachment.destroy) if current_user.author_of? @attachment.attachable
   end
 
   private

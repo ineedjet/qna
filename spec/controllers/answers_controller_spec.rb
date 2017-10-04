@@ -57,12 +57,6 @@ RSpec.describe AnswersController, type: :controller do
         expect(assigns(:answer)).to eq answer
       end
 
-      it 'assign the question for update answer to @question' do
-        patch :update, params: { id: answer, question_id: question.id, answer: attributes_for(:answer) }, format: :js
-
-        expect(assigns(:question)).to eq question
-      end
-
       it 'change answer attributes' do
         patch :update, params: { id: answer, question_id: question.id, answer: { body: 'New body' } }, format: :js
         answer.reload
@@ -103,12 +97,6 @@ RSpec.describe AnswersController, type: :controller do
         patch :set_best, params: { id: answer, question_id: question.id }, format: :js
 
         expect(assigns(:answer)).to eq answer
-      end
-
-      it 'assign the answers question to @question' do
-        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
-
-        expect(assigns(:question)).to eq question
       end
 
       it 'change answer attributes' do

@@ -3,61 +3,48 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
-
+  before_action :build_answer, :gon_question, only: :show
   after_action :publish_question, only: :create
 
-  def index
-    @questions = Question.all
+  respond_to :js, only: :update
 
+  def index
+    respond_with(@questions = Question.all)
   end
 
   def show
-    @answer = Answer.new(question: @question)
-    @answer.attachments.build
-    @answers = @question.answers
-
-    @comment = Comment.new(commentable: @question)
-
-    gon.question = @question
-    gon.answers = @question.answers
+    respond_with(@question)
   end
 
   def new
-    @question = Question.new
-    @question.attachments.build
+    respond_with(@question = Question.new)
   end
 
   def edit
   end
 
   def create
-    @question = current_user.questions.new(question_params)
-
-    if @question.save
-      flash[:notice] = 'Your question successfully created'
-      redirect_to @question
-    else
-      render :new
-    end
+     respond_with(@question = current_user.questions.create(question_params))
   end
 
   def update
-    if current_user.author_of? @question
-      flash[:notice] = 'Your question successfully updated'
-      @question.update(question_params)
-    end
+    respond_with @question.update(question_params) if current_user.author_of? @question
   end
 
   def destroy
-    if current_user.author_of? @question
-      flash[:notice] = 'Your question successfully deleted'
-      @question.destroy
-    end
-
-    redirect_to questions_path
+    respond_with(@question.destroy) if current_user.author_of? @question
   end
 
   private
+
+  def gon_question
+    gon.question = @question
+    gon.answers = @question.answers
+  end
+
+  def build_answer
+    @answer = Answer.new(question: @question)
+  end
 
   def publish_question
     return if @question.errors.any?

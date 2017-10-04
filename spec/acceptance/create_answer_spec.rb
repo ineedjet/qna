@@ -19,7 +19,7 @@ feature 'Create answer', %q{
       click_on 'Create answer'
     end
 
-    expect(page).to have_content 'Your answer successfully created'
+    expect(page).to have_content 'Your Answer successfully created'
     expect(page).to have_content 'Test answer body text text text text'
   end
 

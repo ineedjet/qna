@@ -1,0 +1,22 @@
+en:
+  flash:
+    actions:
+      create:
+        notice: 'Your %{resource_name} successfully created'
+        # alert: '%{resource_name} could not be created.'
+      update:
+        notice: 'Your %{resource_name} successfully updated'
+        # alert: '%{resource_name} could not be updated.'
+      destroy:
+        notice: 'Your %{resource_name} successfully deleted'
+        # alert: '%{resource_name} could not be destroyed.'
+
+    answers:
+      set_best:
+        notice: 'Answer successfully set best'
+      create:
+        alert: 'Your answer has a problem'
+
+    attachment:
+      destroy:
+        alert: 'Premission for attachment denied'
