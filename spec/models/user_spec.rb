@@ -45,8 +45,7 @@ RSpec.describe User do
         end
 
         it 'create autorization with provider and uid' do
-          user = User.find_for_oauth(auth)
-          authorization = user.authorizations.first
+          authorization = User.find_for_oauth(auth).authorizations.first
 
           expect(authorization.provider).to eq auth.provider
           expect(authorization.uid).to eq auth.uid
