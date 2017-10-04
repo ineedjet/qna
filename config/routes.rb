@@ -1,5 +1,5 @@
-Rails.application.routes.draw do
-  devise_for :users
+ Rails.application.routes.draw do
+  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
 
   concern :voted do
     member do
