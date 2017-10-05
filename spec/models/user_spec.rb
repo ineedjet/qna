@@ -88,4 +88,26 @@ RSpec.describe User do
 
     end
   end
+
+  describe '.create_user_and_auth' do
+    it 'creates new user' do
+      expect{ User.create_user_and_auth('mail@example.com', 'twitter', '12345656') }.to change(User, :count).by(1)
+    end
+
+    it 'creates new autorization' do
+      expect{ User.create_user_and_auth('mail@example.com', 'twitter',  '12345656') }.to change(Authorization, :count).by(1)
+    end
+
+    it 'user use email'do
+      user = User.create_user_and_auth('mail@example.com', 'twitter', '12345656')
+      expect(user.email).to eq 'mail@example.com'
+    end
+
+    it 'create autorization for User with provider and uid' do
+      authorization = User.create_user_and_auth('mail@example.com', 'twitter', '12345656').authorizations.first
+
+      expect(authorization.provider).to eq 'twitter'
+      expect(authorization.uid).to eq '12345656'
+    end
+  end
 end

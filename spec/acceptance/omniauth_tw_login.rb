@@ -12,7 +12,7 @@ feature 'Authentication with twitter', %q{
       click_on 'Ask question'
 
       mock_twitter_hash
-      click_on 'Sign in with twitter'
+      click_on 'Sign in with Twitter'
 
       expect(page).to have_content 'Укажите e-mail.'
       fill_in 'Email', with: 'test@email.com'
