@@ -9,16 +9,17 @@ feature 'Authentication with twitter', %q{
   context 'user signs in from twitter account for the first time' do
     scenario 'can sign in from twitter account' do
       visit root_path
-      click_on 'Sign in'
+      click_on 'Ask question'
 
       mock_twitter_hash
-      click_on 'Sign in with Facebook'
+      click_on 'Sign in with twitter'
 
-      expect(page).to have_content 'Please, fill in your email.'
+      expect(page).to have_content 'Укажите e-mail.'
       fill_in 'Email', with: 'test@email.com'
       click_on 'Send'
 
-      expect(page).to have_content 'You must confirm your email. The instructions was sent to your email.'
+      expect(current_path).to eq new_question_path
+      expect(page).to have_content 'Завершить сессию'
     end
   end
 
@@ -28,14 +29,14 @@ feature 'Authentication with twitter', %q{
 
     scenario 'can sign in from twitter account' do
       visit root_path
-      click_on 'Sign in'
+      click_on 'Ask question'
 
       mock_twitter_hash
       click_on 'Sign in with Twitter'
 
       expect(current_path).to eq root_path
       expect(page).to have_content 'Successfully authenticated from Twitter account.'
-      expect(page).to have_content 'Sign out'
+      expect(page).to have_content 'Завершить сессию'
     end
   end
 
@@ -43,7 +44,7 @@ feature 'Authentication with twitter', %q{
     scenario "can handle authentication error" do
       OmniAuth.config.mock_auth[:twitter] = :invalid_credentials
       visit root_path
-      click_on 'Sign in'
+      click_on 'Ask question'
       click_on 'Sign in with Twitter'
       expect(page).to have_content('Could not authenticate you from Twitter because "Invalid credentials".')
     end
