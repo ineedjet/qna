@@ -53,6 +53,7 @@ GEM
     bindex (0.5.0)
     builder (3.2.3)
     byebug (9.1.0)
+    cancancan (2.0.0)
     capybara (2.13.0)
       addressable
       mime-types (>= 1.16)
@@ -289,6 +290,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  cancancan
   capybara
   capybara-webkit
   carrierwave
