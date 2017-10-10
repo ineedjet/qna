@@ -15,15 +15,15 @@ class AnswersController < ApplicationController
   end
 
   def update
-    respond_with @answer.update(answer_params) if current_user.author_of? @answer
+    respond_with @answer.update(answer_params)
   end
 
   def destroy
-    respond_with(@answer.destroy) if current_user.author_of? @answer
+    respond_with(@answer.destroy)
   end
 
   def set_best
-    respond_with(@answer.set_best) if current_user.author_of? @answer.question
+    respond_with(@answer.set_best)
   end
 
   private
