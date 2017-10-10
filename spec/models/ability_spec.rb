@@ -13,4 +13,10 @@ RSpec.describe Ability , type: :model do
 
     it { should_not be_able_to :manage, :all  }
   end
+
+  describe 'for admin' do
+    let(:user) { create :user, admin: true}
+
+    it { should be_able_to :manage, :all  }
+  end
 end
