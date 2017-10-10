@@ -7,7 +7,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :gon_user
 
-  check_authorization
+  check_authorization unless: :devise_controller?
+
 
   private
 

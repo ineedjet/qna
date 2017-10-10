@@ -70,19 +70,6 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to render_template 'answers/update'
       end
 
-
-    end
-
-    context 'with stranger user' do
-      sign_in_user
-
-      it 'change answer attributes' do
-        answer_old_body = answer.body
-        patch :update, params: { id: answer, question_id: question.id, answer: { body: 'New body' } }, format: :js
-        answer.reload
-
-        expect(answer.body).to eq answer_old_body
-      end
     end
 
   end
@@ -112,25 +99,6 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to render_template 'answers/set_best'
       end
 
-
-    end
-
-    context 'with stranger user question' do
-      it 'do not change answer attributes if it strangers question' do
-        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
-        answer.reload
-
-        expect(answer.best?).to_not eq true
-      end
-    end
-
-    context 'with stranger user' do
-      it 'change answer attribute set_best' do
-        patch :set_best, params: { id: answer, question_id: question.id }, format: :js
-        answer.reload
-
-        expect(answer.body).to_not eq true
-      end
     end
 
   end
@@ -151,13 +119,6 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'with stranger user' do
-
-      it 'deletes answer' do
-        expect { delete :destroy, params: { question_id: question.id, id: answer2 }, format: :js }.to_not change(question.answers, :count)
-      end
-
-    end
   end
 
 end

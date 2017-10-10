@@ -118,18 +118,6 @@ RSpec.describe CommentsController, type: :controller do
 
     end
 
-    context 'with stranger user' do
-      before { sign_in_the_user(user2) }
-
-      it 'not change comment attributes' do
-        comment_old_body = comment.body
-        patch :update, params: { id: comment, comment: { body: 'New body' } }, format: :js
-        comment.reload
-
-        expect(comment.body).to eq comment_old_body
-      end
-    end
-
   end
 
 

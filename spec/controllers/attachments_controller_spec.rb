@@ -22,12 +22,6 @@ RSpec.describe AttachmentsController, type: :controller do
       end
     end
 
-    context 'with stranger user' do
-      it 'deletes question' do
-        expect { delete :destroy, params: { id: question_attachment }, format: :js }.to_not change(question.attachments, :count)
-      end
-
-    end
   end
 
   describe  'DELETE #destroy for question attachment' do
@@ -49,11 +43,5 @@ RSpec.describe AttachmentsController, type: :controller do
       end
     end
 
-    context 'with stranger user' do
-      it 'deletes question' do
-        expect { delete :destroy, params: { id: answer_attachment }, format: :js }.to_not change(answer.attachments, :count)
-      end
-
-    end
   end
 end
