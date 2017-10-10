@@ -23,6 +23,16 @@ class Ability
     can :create, [Question, Answer, Comment, Attachment]
     can [:update, :destroy], [Question, Answer, Comment], user: user
     can :destroy, Attachment, attachable: { user: user }
+    can :set_best, Answer do |answer|
+      answer.question.user == user
+    end
+    can :vote_del, Votable do |votable|
+      votable.vote_by(user)
+    end
+    can [:vote_positive, :vote_negative],  Votable do |votable|
+      votable.user != user && !votable.vote_by(user)
+    end
+
   end
 
   def admin_abilities

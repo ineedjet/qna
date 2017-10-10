@@ -24,6 +24,7 @@ RSpec.describe Ability , type: :model do
     let(:user) { create :user }
     let(:user2 ) { create :user }
     let(:question ) { create :question, user: user }
+    let(:question2 ) { create :question, user: user2 }
 
     it { should_not be_able_to :manage, :all }
     it { should be_able_to :read, :all }
@@ -45,6 +46,9 @@ RSpec.describe Ability , type: :model do
 
       it { should be_able_to :destroy, create(:answer, question: question, user: user), user: user }
       it { should_not be_able_to :destroy, create(:answer, question: question , user: user2), user: user }
+
+      it { should be_able_to :set_best, create(:answer, question: question, user:user), user: user }
+      it { should_not be_able_to :set_best, create(:answer, question: question2, user:user), user: user }
     end
 
     context 'Comment' do
@@ -65,11 +69,23 @@ RSpec.describe Ability , type: :model do
       it { should_not be_able_to :destroy, create(:attachment, attachable: question2), user: user }
     end
 
+    context 'Vote' do
+      let!(:question) { create(:question, user: user2) }
+      let!(:voted_question) { create(:question, user: user2) }
+      let!(:my_question) { create(:question, user: user) }
+      let!(:vote) { create(:vote, user: user, votable: voted_question, vote_type: 'negative') }
 
+      it { should be_able_to :vote_positive, question, user: user }
+      it { should_not be_able_to :vote_positive, my_question, user: user }
+      it { should_not be_able_to :vote_positive, voted_question, user: user }
 
+      it { should be_able_to :vote_negative, question, user: user }
+      it { should_not be_able_to :vote_negative, my_question, user: user }
+      it { should_not be_able_to :vote_negative, voted_question, user: user }
 
-
-
+      it { should be_able_to :vote_del, voted_question, user: user}
+      it { should_not be_able_to :vote_del, question, user: user }
+    end
 
   end
 end
