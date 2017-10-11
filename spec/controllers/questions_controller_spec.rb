@@ -58,9 +58,11 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
-    sign_in_user
+    before do
+      sign_in_the_user(user)
+      get :edit,  params: { id: question }
+    end
 
-    before { get :edit,  params: { id: question } }
 
     it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
@@ -145,21 +147,6 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.title).to eq 'MyString'
         expect(question.body).to eq 'MyText'
       end
-
-    end
-
-    context 'with stranger user' do
-      sign_in_user
-
-      it 'change answer attributes' do
-        question_old_title = question.title
-        question_old_body = question.body
-        patch :update, params: { id: question, question: { title: "New title", body: 'New body' } }, format: :js
-        question.reload
-
-        expect(question.title).to eq question_old_title
-        expect(question.body).to eq question_old_body
-      end
     end
 
   end
@@ -179,14 +166,6 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'with stranger user' do
-      before { question2 }
-
-      it 'deletes question' do
-        expect { delete :destroy, params: { id: question2 } }.to_not change(user2.questions, :count)
-      end
-
-    end
   end
 
 end

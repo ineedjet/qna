@@ -6,6 +6,8 @@ class AnswersController < ApplicationController
   before_action :load_answer, only: [:destroy, :update, :set_best]
   after_action :publish_answer, only: :create
 
+  authorize_resource
+
   respond_to :js
 
   def create
@@ -13,15 +15,15 @@ class AnswersController < ApplicationController
   end
 
   def update
-    respond_with @answer.update(answer_params) if current_user.author_of? @answer
+    respond_with @answer.update(answer_params)
   end
 
   def destroy
-    respond_with(@answer.destroy) if current_user.author_of? @answer
+    respond_with(@answer.destroy)
   end
 
   def set_best
-    respond_with(@answer.set_best) if current_user.author_of? @answer.question
+    respond_with(@answer.set_best)
   end
 
   private
