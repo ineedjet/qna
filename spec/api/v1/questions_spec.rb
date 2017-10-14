@@ -79,8 +79,6 @@ describe 'Profile API' do
           expect(response.body).to be_json_eql(question_attachment.file.url.to_json).at_path("attachments/0/url")
         end
 
-        # '/uploads/attachment/file/1/spec_helper.rb'
-
       end
 
     end
