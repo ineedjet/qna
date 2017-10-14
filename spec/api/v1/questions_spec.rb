@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'Profile API' do
-  describe 'GET /me' do
+  describe 'GET /index' do
     context 'unauthorized' do
       it 'return 401 status if no access_token' do
         get '/api/v1/questions', params: { format: :json }
