@@ -41,6 +41,7 @@ describe 'Profile API' do
       context '/show' do
         let!(:question) { create(:question) }
         let!(:comment) { create(:comment, commentable: question) }
+        let!(:question_attachment) { create :attachment, attachable: question }
 
         before { get "/api/v1/questions/#{question.id}", params: { format: :json, access_token: access_token.token } }
 
@@ -59,6 +60,26 @@ describe 'Profile API' do
             expect(response.body).to be_json_eql(comment.send(attr.to_sym).to_json).at_path(attr).at_path("comments/0/#{attr}")
           end
         end
+
+        it 'attachments includes in question object' do
+          expect(response.body).to have_json_size(1).at_path('attachments')
+        end
+
+        %w(id created_at updated_at).each do |attr|
+          it "question contains attachments #{attr}" do
+            expect(response.body).to be_json_eql(question_attachment.send(attr.to_sym).to_json).at_path("attachments/0/#{attr}")
+          end
+        end
+
+        it "question contains attachments filename" do
+          expect(response.body).to be_json_eql(question_attachment.file.file.filename.to_json).at_path("attachments/0/filename")
+        end
+
+        it "question contains attachments url" do
+          expect(response.body).to be_json_eql(question_attachment.file.url.to_json).at_path("attachments/0/url")
+        end
+
+        # '/uploads/attachment/file/1/spec_helper.rb'
 
       end
 
