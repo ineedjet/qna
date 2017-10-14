@@ -40,6 +40,49 @@ describe 'Profile API' do
         end
       end
 
+      context '/show' do
+        let!(:question) { create(:question) }
+        let!(:answer) { create(:answer, question: question) }
+        let!(:comment) { create(:comment, commentable: answer) }
+        let!(:answer_attachment) { create :attachment, attachable: answer }
+
+        before { get "/api/v1/answers/#{answer.id}", params: { format: :json, access_token: access_token.token } }
+
+        %w(id body created_at updated_at).each do |attr|
+          it "answer object contains #{attr}" do
+            expect(response.body).to be_json_eql(answer.send(attr.to_sym).to_json).at_path(attr)
+          end
+        end
+
+        it 'comments includes in answer object' do
+          expect(response.body).to have_json_size(1).at_path('comments')
+        end
+
+        %w(id body created_at updated_at).each do |attr|
+          it "answer contains comments #{attr}" do
+            expect(response.body).to be_json_eql(comment.send(attr.to_sym).to_json).at_path(attr).at_path("comments/0/#{attr}")
+          end
+        end
+
+        it 'attachments includes in answer object' do
+          expect(response.body).to have_json_size(1).at_path('attachments')
+        end
+
+        %w(id created_at updated_at).each do |attr|
+          it "answer contains attachments #{attr}" do
+            expect(response.body).to be_json_eql(answer_attachment.send(attr.to_sym).to_json).at_path("attachments/0/#{attr}")
+          end
+        end
+
+        it "answer contains attachments filename" do
+          expect(response.body).to be_json_eql(answer_attachment.file.file.filename.to_json).at_path("attachments/0/filename")
+        end
+
+        it "answer contains attachments url" do
+          expect(response.body).to be_json_eql(answer_attachment.file.url.to_json).at_path("attachments/0/url")
+        end
+
+      end
 
 
     end
