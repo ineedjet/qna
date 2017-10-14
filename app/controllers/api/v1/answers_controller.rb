@@ -1,7 +1,7 @@
 class Api::V1::AnswersController < Api::V1::BaseController
 
   def index
-    respond_with Question.find(params[:question_id]).answers
+    respond_with Question.find(params[:question_id]).answers.to_json
   end
 
   def show
