@@ -1,4 +1,5 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
+  authorize_resource class: User
 
   def index
     respond_with Question.all
