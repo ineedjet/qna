@@ -86,7 +86,6 @@ describe 'Profile API' do
       context '/create' do
 
         context 'with valid attributes' do
-          # before {  }
 
           it 'saves the new question in the database' do
             expect{
