@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe 'Profile API' do
+
   describe 'GET /index' do
     context 'unauthorized' do
       it 'return 401 status if no access_token' do
@@ -15,7 +16,8 @@ describe 'Profile API' do
     end
 
     context 'authorized' do
-      let(:access_token) {create(:access_token) }
+      let(:user) { create(:user) }
+      let(:access_token) {create(:access_token, resource_owner_id: user.id) }
 
       context '/index' do
         let!(:questions) { create_list(:question, 3) }
@@ -77,6 +79,44 @@ describe 'Profile API' do
 
         it "question contains attachments url" do
           expect(response.body).to be_json_eql(question_attachment.file.url.to_json).at_path("attachments/0/url")
+        end
+
+      end
+
+      context '/create' do
+
+        context 'with valid attributes' do
+          # before {  }
+
+          it 'saves the new question in the database' do
+            expect{
+              post '/api/v1/questions', params: { format: :json, access_token: access_token.token, question: { body: 'Question body', title: 'Question title' } }
+            }.to change(Question, :count).by(1)
+          end
+
+          it 'return the new question' do
+            post '/api/v1/questions', params: { format: :json, access_token: access_token.token, question: { body: 'Question body', title: 'Question title' } }
+            expect(response.body).to be_json_eql('Question body'.to_json).at_path('body')
+            expect(response.body).to be_json_eql('Question title'.to_json).at_path('title')
+          end
+
+          it 'check user is author' do
+            post '/api/v1/questions', params: { format: :json, access_token: access_token.token, question: { body: 'Question body', title: 'Question title' } }
+            expect(Question.last.user).to eq user
+          end
+        end
+
+        context 'with invalid attributes' do
+          it 'does not saves the question in database' do
+            expect{
+              post '/api/v1/questions', params: { format: :json, access_token: access_token.token, question: { body: '', title: '' } }
+            }.to_not change(Question, :count)
+          end
+
+          it 'returns status 422' do
+            post '/api/v1/questions', params: { format: :json, access_token: access_token.token, question: { body: '', title: '' } }
+            expect(response.status).to eq 422
+          end
         end
 
       end
