@@ -32,6 +32,7 @@ class Ability
     can [:vote_positive, :vote_negative],  Votable do |votable|
       votable.user != user && !votable.vote_by(user)
     end
+    can :me, User
 
   end
 

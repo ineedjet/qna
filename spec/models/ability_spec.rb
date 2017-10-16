@@ -87,5 +87,10 @@ RSpec.describe Ability , type: :model do
       it { should_not be_able_to :vote_del, question, user: user }
     end
 
+    context 'User' do
+      it { should be_able_to :me, user }
+    end
+
+
   end
 end
