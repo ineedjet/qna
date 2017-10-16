@@ -11,7 +11,7 @@ describe 'Profile API' do
 
       it_behaves_like 'API authenticable'
 
-      before {get '/api/v1/questions', params: {format: :json, access_token: access_token.token}}
+      before { do_request(access_token: access_token.token) }
 
       it 'should return status 200' do
         expect(response).to be_success
@@ -40,7 +40,7 @@ describe 'Profile API' do
 
       it_behaves_like 'API authenticable'
 
-      before {get "/api/v1/questions/#{question.id}", params: {format: :json, access_token: access_token.token}}
+      before { do_request(access_token: access_token.token) }
 
       %w(id title body created_at updated_at).each do |attr|
         it "question object contains #{attr}" do
@@ -87,19 +87,17 @@ describe 'Profile API' do
         it_behaves_like 'API authenticable'
 
         it 'saves the new question in the database' do
-          expect {
-            post '/api/v1/questions', params: {format: :json, access_token: access_token.token, question: {body: 'Question body', title: 'Question title'}}
-          }.to change(Question, :count).by(1)
+          expect { do_request(access_token: access_token.token) }.to change(Question, :count).by(1)
         end
 
         it 'return the new question' do
-          post '/api/v1/questions', params: {format: :json, access_token: access_token.token, question: {body: 'Question body', title: 'Question title'}}
+          do_request(access_token: access_token.token)
           expect(response.body).to be_json_eql('Question body'.to_json).at_path('body')
           expect(response.body).to be_json_eql('Question title'.to_json).at_path('title')
         end
 
         it 'check user is author' do
-          post '/api/v1/questions', params: {format: :json, access_token: access_token.token, question: {body: 'Question body', title: 'Question title'}}
+          do_request(access_token: access_token.token)
           expect(Question.last.user).to eq user
         end
 
@@ -112,9 +110,7 @@ describe 'Profile API' do
         it_behaves_like 'API authenticable'
 
         it 'does not saves the question in database' do
-          expect {
-            post '/api/v1/questions', params: {format: :json, access_token: access_token.token, question: {body: '', title: ''}}
-          }.to_not change(Question, :count)
+          expect { do_request(access_token: access_token.token) }.to_not change(Question, :count)
         end
 
         it 'returns status 422' do
