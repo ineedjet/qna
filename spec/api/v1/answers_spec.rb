@@ -112,14 +112,10 @@ describe 'Answer API' do
 
     context 'with invalid attributes' do
       it_behaves_like 'API authenticable'
+      it_behaves_like 'API unprocessable'
 
       it 'does not saves the answer in database' do
         expect {do_request(access_token: access_token.token)}.to_not change(Answer, :count)
-      end
-
-      it 'returns status 422' do
-        do_request(access_token: access_token.token)
-        expect(response.status).to eq 422
       end
 
       def do_request(options = {})
