@@ -4,13 +4,11 @@ describe 'Profile API' do
   describe 'GET /me' do
     let(:me) {create(:user)}
     let(:access_token) {create(:access_token, resource_owner_id: me.id)}
+
     it_behaves_like 'API authenticable'
+    it_behaves_like 'API successfuble'
 
     before {do_request(access_token: access_token.token)}
-
-    it 'should return status 200' do
-      expect(response).to be_success
-    end
 
     %w(email id).each do |attr|
       it "contains #{attr}" do
@@ -35,12 +33,9 @@ describe 'Profile API' do
     let!(:users) {create_list(:user, 2)}
 
     it_behaves_like 'API authenticable'
+    it_behaves_like 'API successfuble'
 
     before {do_request(access_token: access_token.token)}
-
-    it 'should return status 200' do
-      expect(response).to be_success
-    end
 
     it "does not contains me" do
       expect(response.body).to_not be_json_eql(me.to_json)

@@ -8,12 +8,9 @@ describe 'Question API' do
     let!(:questions) {create_list(:question, 3)}
 
     it_behaves_like 'API authenticable'
+    it_behaves_like 'API successfuble'
 
     before {do_request(access_token: access_token.token)}
-
-    it 'should return status 200' do
-      expect(response).to be_success
-    end
 
     it 'return list of questions' do
       expect(response.body).to have_json_size(3)
@@ -37,6 +34,7 @@ describe 'Question API' do
     let!(:question_attachment) {create :attachment, attachable: question}
 
     it_behaves_like 'API authenticable'
+    it_behaves_like 'API successfuble'
 
     before {do_request(access_token: access_token.token)}
 
