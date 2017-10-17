@@ -95,24 +95,21 @@ RSpec.describe CommentsController, type: :controller do
   describe 'PATCH #update' do
 
     context 'with same user' do
-      before { sign_in_the_user(user) }
+      before do
+        sign_in_the_user(user)
+        patch :update, params: { id: comment, comment: { body: 'New body' } }, format: :js
+      end
 
       it 'assign the update comment to @comment' do
-        patch :update, params: { id: comment, comment: attributes_for(:comment) }, format: :js
-
         expect(assigns(:comment)).to eq comment
       end
 
       it 'change comment attributes' do
-        patch :update, params: { id: comment, comment: { body: 'New body' } }, format: :js
         comment.reload
-
         expect(comment.body).to eq 'New body'
       end
 
       it 'change answer attributes' do
-        patch :update, params: { id: comment, comment: { body: 'New body' } }, format: :js
-
         expect(response).to render_template 'comments/update'
       end
 
