@@ -50,7 +50,7 @@ RSpec.describe CommentsController, type: :controller do
   describe 'POST #create by user (for answer)' do
     let!(:answer) { create(:answer, question: question, user: user) }
 
-    before{ sign_in_the_user(user) }
+    before { sign_in_the_user(user) }
 
     context 'with valid attributes' do
       it 'saves the new comment in the database with commentsble association' do
@@ -95,6 +95,7 @@ RSpec.describe CommentsController, type: :controller do
   describe 'PATCH #update' do
 
     context 'with same user' do
+      let(:action) { 'comments/update' }
       before do
         sign_in_the_user(user)
         patch :update, params: { id: comment, comment: { body: 'New body' } }, format: :js
@@ -109,9 +110,7 @@ RSpec.describe CommentsController, type: :controller do
         expect(comment.body).to eq 'New body'
       end
 
-      it 'change answer attributes' do
-        expect(response).to render_template 'comments/update'
-      end
+      it_behaves_like 'render-templatable'
 
     end
 
