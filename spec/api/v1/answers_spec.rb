@@ -2,52 +2,44 @@ require 'rails_helper'
 
 describe 'Answer API' do
   let!(:question) {create(:question)}
-
-  context 'unauthorized' do
-    it 'return 401 status if no access_token' do
-      get "/api/v1/questions/#{question.id}/answers", params: {format: :json}
-      expect(response.status).to eq 401
-    end
-
-    it 'return 401 status if access_token wrong' do
-      get "/api/v1/questions/#{question.id}/answers", params: {format: :json, access_token: '123456'}
-      expect(response.status).to eq 401
-    end
-  end
+  let(:user) {create(:user)}
+  let(:access_token) {create(:access_token, resource_owner_id: user.id)}
 
   describe 'GET /index' do
-    let(:user) {create(:user)}
-    let(:access_token) {create(:access_token, resource_owner_id: user.id)}
+    let!(:answers) {create_list(:answer, 3, question: question)}
 
-    context '/index' do
-      let!(:answers) {create_list(:answer, 3, question: question)}
+    it_behaves_like 'API authenticable'
 
-      before {get "/api/v1/questions/#{question.id}/answers", params: {format: :json, access_token: access_token.token}}
+    before {do_request(access_token: access_token.token)}
 
-      it 'should return status 200' do
-        expect(response).to be_success
+    it 'should return status 200' do
+      expect(response).to be_success
+    end
+
+    it 'return list of answer for question' do
+      expect(response.body).to have_json_size(3)
+    end
+
+    %w(id body created_at updated_at).each do |attr|
+      it "answer object contains #{attr}" do
+        answer = answers.first
+        expect(response.body).to be_json_eql(answer.send(attr.to_sym).to_json).at_path("0/#{attr}")
       end
+    end
 
-      it 'return list of answer for question' do
-        expect(response.body).to have_json_size(3)
-      end
-
-      %w(id body created_at updated_at).each do |attr|
-        it "answer object contains #{attr}" do
-          answer = answers.first
-          expect(response.body).to be_json_eql(answer.send(attr.to_sym).to_json).at_path("0/#{attr}")
-        end
-      end
+    def do_request(options = {})
+      get "/api/v1/questions/#{question.id}/answers", params: {format: :json}.merge(options)
     end
   end
 
   describe '/show' do
-    let!(:question) {create(:question)}
     let!(:answer) {create(:answer, question: question)}
     let!(:comment) {create(:comment, commentable: answer)}
     let!(:answer_attachment) {create :attachment, attachable: answer}
 
-    before {get "/api/v1/answers/#{answer.id}", params: {format: :json, access_token: access_token.token}}
+    it_behaves_like 'API authenticable'
+
+    before {do_request(access_token: access_token.token)}
 
     %w(id body created_at updated_at).each do |attr|
       it "answer object contains #{attr}" do
@@ -82,44 +74,58 @@ describe 'Answer API' do
     it "answer contains attachments url" do
       expect(response.body).to be_json_eql(answer_attachment.file.url.to_json).at_path("attachments/0/url")
     end
+
+    def do_request(options = {})
+      get "/api/v1/answers/#{answer.id}", params: {format: :json}.merge(options)
+    end
   end
 
 
   describe '/create' do
 
     context 'with valid attributes' do
+      it_behaves_like 'API authenticable'
+
       it 'saves the new answer in the database' do
         expect {
-          post "/api/v1/questions/#{question.id}/answers", params: {format: :json, access_token: access_token.token, answer: {body: 'Answer body'}}
+          do_request(access_token: access_token.token)
         }.to change(Answer, :count).by(1)
       end
 
       it 'return the new answer' do
-        post "/api/v1/questions/#{question.id}/answers", params: {format: :json, access_token: access_token.token, answer: {body: 'Answer body'}}
+        do_request(access_token: access_token.token)
         expect(response.body).to be_json_eql('Answer body'.to_json).at_path('body')
       end
 
       it 'check user is author' do
-        post "/api/v1/questions/#{question.id}/answers", params: {format: :json, access_token: access_token.token, answer: {body: 'Answer body'}}
+        do_request(access_token: access_token.token)
         expect(Answer.last.user).to eq user
       end
 
       it 'check question association' do
-        post "/api/v1/questions/#{question.id}/answers", params: {format: :json, access_token: access_token.token, answer: {body: 'Answer body'}}
+        do_request(access_token: access_token.token)
         expect(Answer.last.question).to eq question
+      end
+
+      def do_request(options = {})
+        post "/api/v1/questions/#{question.id}/answers", params: {format: :json, answer: {body: 'Answer body'}}.merge(options)
       end
     end
 
     context 'with invalid attributes' do
+      it_behaves_like 'API authenticable'
+
       it 'does not saves the answer in database' do
-        expect {
-          post "/api/v1/questions/#{question.id}/answers", params: {format: :json, access_token: access_token.token, answer: {body: ''}}
-        }.to_not change(Answer, :count)
+        expect {do_request(access_token: access_token.token)}.to_not change(Answer, :count)
       end
 
       it 'returns status 422' do
-        post "/api/v1/questions/#{question.id}/answers", params: {format: :json, access_token: access_token.token, answer: {body: ''}}
+        do_request(access_token: access_token.token)
         expect(response.status).to eq 422
+      end
+
+      def do_request(options = {})
+        post "/api/v1/questions/#{question.id}/answers", params: {format: :json, answer: {body: ''}}.merge(options)
       end
     end
   end
