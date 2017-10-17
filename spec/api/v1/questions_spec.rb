@@ -110,7 +110,7 @@ describe 'Question API' do
       end
 
       it 'returns status 422' do
-        post '/api/v1/questions', params: {format: :json, access_token: access_token.token, question: {body: '', title: ''}}
+        do_request(access_token: access_token.token)
         expect(response.status).to eq 422
       end
 
