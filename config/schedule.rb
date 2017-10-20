@@ -17,8 +17,8 @@
 #   runner "AnotherModel.prune_old_records"
 # end
 
-# every 1.month do
-#   runner "AnotherModel.prune_old_records"
-# end
+every 24.hours do
+   runner "DailyDigestJob.perform"
+end
 
 # Learn more: http://github.com/javan/whenever
