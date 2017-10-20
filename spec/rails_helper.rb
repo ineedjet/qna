@@ -7,6 +7,7 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'cancan/matchers'
 require 'sidekiq/testing'
+require 'capybara/email/rspec'
 
 Sidekiq::Testing.inline!
 
