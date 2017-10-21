@@ -3,6 +3,7 @@ div id="Question-#{question.id}"
     .panel-heading
       = link_to question.title, question, class: "question-link"
       = render 'shared/vote_menu', votable: question
+      = render 'shared/subscription_menu', question: question
     .panel-body
       p = question.body
       - if question.attachments.present?
