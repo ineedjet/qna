@@ -2,13 +2,25 @@ class QuestionsController < ApplicationController
   include Voted
 
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show, :edit, :update, :destroy]
+  before_action :load_question, only: [:show, :edit, :update, :destroy, :subscribe, :unsubscribe]
   before_action :build_answer, :gon_question, only: :show
   after_action :publish_question, only: :create
+
+  respond_to :json, only: [:subscribe, :unsubscribe]
 
   authorize_resource
 
   respond_to :js, only: :update
+
+  def subscribe
+    current_user.subscribe_to(@question)
+    respond_with(@question)
+  end
+
+  def unsubscribe
+    current_user.unsubscribe_to(@question)
+    respond_with(@question)
+  end
 
   def index
     respond_with(@questions = Question.all)
