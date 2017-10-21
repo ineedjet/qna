@@ -13,7 +13,7 @@ RSpec.describe QuestionsController, type: :controller do
       sign_in_user
 
       it 'saves the new subscribe in the database' do
-        expect { post :subscribe, params: { id: question }, format: :json }.to change(Subscription, :count ).by(1)
+        expect { post :subscribe, params: { id: question }, format: :json }.to change(question.subscriptions, :count ).by(1)
         expect(JSON.parse(response.body)['subscription_status']).to eq true
       end
     end
