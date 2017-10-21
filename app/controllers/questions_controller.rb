@@ -38,7 +38,9 @@ class QuestionsController < ApplicationController
   end
 
   def create
-     respond_with(@question = current_user.questions.create(question_params))
+    @question = current_user.questions.create(question_params)
+    current_user.subscribe_to(@question)
+    respond_with(@question)
   end
 
   def update
