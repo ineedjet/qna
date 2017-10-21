@@ -1,5 +1,15 @@
 class QuestionSerializer < ActiveModel::Serializer
-  attributes :id, :title, :body, :created_at, :updated_at, :vote_rating
+  attributes :id, :title, :body, :created_at, :updated_at, :vote_rating, :subscription_status
   has_many :comments
   has_many :attachments
+
+  def subscription_status
+    if current_user.present?
+      if current_user.subscribed_to?(object)
+        return true
+      end
+      return false
+    end
+    nil
+  end
 end
