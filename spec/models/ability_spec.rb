@@ -91,6 +91,11 @@ RSpec.describe Ability , type: :model do
       it { should be_able_to :me, user }
     end
 
+    context 'Subscribe' do
+      it { should be_able_to :subscribe, question }
+      it { should be_able_to :unsubscribe, question }
+    end
+
 
   end
 end
