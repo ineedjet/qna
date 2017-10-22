@@ -33,8 +33,8 @@ feature 'subscribe question', %q{
     expect(page).to_not have_link "make subscribe"
     expect(page).to have_link "unsubscribe"
     click_on "unsubscribe"
-    expect(page).to have_link "make subscribe"
     expect(page).to_not have_link "unsubscribe"
+    expect(page).to have_link "make subscribe"
   end
 
 end
