@@ -6,6 +6,8 @@ feature 'subscribe question', %q{
   I want to be able to subscribe for questions
 } do
 
+  Capybara.exact = true
+
   given!(:user) { create(:user) }
   given!(:question) { create(:question, user: user) }
   given!(:subscribed_question) { create(:question) }
@@ -13,28 +15,28 @@ feature 'subscribe question', %q{
 
   scenario 'Unauthenticated user cant see subscribe buttons', js:true do
     visit question_path(question)
-    expect(page).to_not have_link "make subscribe"
+    expect(page).to_not have_link "subscribe"
     expect(page).to_not have_link "unsubscribe"
   end
 
   scenario 'Authenticated user can subscribe unsubscribed question', js:true do
     sign_in(user)
     visit question_path(question)
-    expect(page).to have_link "make subscribe"
+    expect(page).to have_link "subscribe"
     expect(page).to_not have_link "unsubscribe"
-    click_on "make subscribe"
-    expect(page).to_not have_link "make subscribe"
+    click_on "subscribe"
+    expect(page).to_not have_link "subscribe"
     expect(page).to have_link "unsubscribe"
   end
 
   scenario 'Authenticated user can unsubscribe subscribed question', js:true do
     sign_in(user)
     visit question_path(subscribed_question)
-    expect(page).to_not have_link "make subscribe"
+    expect(page).to_not have_link "subscribe"
     expect(page).to have_link "unsubscribe"
     click_on "unsubscribe"
     expect(page).to_not have_link "unsubscribe"
-    expect(page).to have_link "make subscribe"
+    expect(page).to have_link "subscribe"
   end
 
 end
