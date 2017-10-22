@@ -47,4 +47,16 @@ RSpec.describe Answer, type: :model do
       expect(question.answers.last).to eq answer3
     end
   end
+
+  context 'send answer to question subscribers' do
+    let(:question) { create(:question) }
+    let(:answer) { build(:answer, question: question) }
+
+    it 'send answer to AnswerNotificationJob after create' do
+      expect(AnswerNotificationJob).to receive(:perform_later).with(answer)
+
+      answer.save
+    end
+  end
+
 end
