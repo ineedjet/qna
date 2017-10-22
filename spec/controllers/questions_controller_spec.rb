@@ -20,7 +20,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'patch #unsubscribe' do
-    let!(:subscription) { create(:subscription, user: user, question: question ) }
+    let!(:subscription) { create(:subscription, user: user, question: question2 ) }
 
     context "Subscribered user unsubscribe" do
       before{ sign_in_the_user(user) }
