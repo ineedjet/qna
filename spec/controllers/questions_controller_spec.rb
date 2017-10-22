@@ -120,10 +120,6 @@ RSpec.describe QuestionsController, type: :controller do
         expect(assigns(:question).user).to eq @user
       end
 
-      it 'subscribe user to created question' do
-        post :create, params: { question: attributes_for(:question) }
-        expect(assigns(:question).subscriptions.last.user).to eq @user
-      end
     end
 
     context 'with invalid attributes' do

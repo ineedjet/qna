@@ -11,4 +11,14 @@ RSpec.describe Question, type: :model do
 
   it_behaves_like 'votable'
   it_behaves_like 'commentable'
+
+  context 'subscribe author to his question' do
+    let(:user) { create(:user) }
+    let(:question) { build(:question, user: user) }
+
+    it 'send answer to AnswerNotificationJob after create' do
+      expect(user).to receive(:subscribe_to).with(question)
+      question.save
+    end
+  end
 end
