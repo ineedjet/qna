@@ -9,9 +9,11 @@ feature 'subscribe question', %q{
   Capybara.exact = true
 
   given!(:user) { create(:user) }
-  given!(:question) { create(:question, user: user) }
+  given!(:question) { create(:question) }
   given!(:subscribed_question) { create(:question) }
   given!(:subscription) { create(:subscription, user: user, question: subscribed_question) }
+  given!(:author) { create(:user) }
+  given!(:authors_question) { create(:question, user: author) }
 
   scenario 'Unauthenticated user cant see subscribe buttons', js:true do
     visit question_path(question)
@@ -39,4 +41,59 @@ feature 'subscribe question', %q{
     expect(page).to have_link "subscribe"
   end
 
+  scenario 'Author of question receive answers', js:true do
+    sign_in(user)
+    visit question_path(authors_question)
+    within '.new_answer' do
+      fill_in 'Body', with: 'Test answer body text'
+      click_on 'Create answer'
+    end
+    open_email(author.email)
+    expect(current_email).to have_content authors_question.title
+    expect(current_email).to have_content 'Test answer body text'
+  end
+
+  scenario 'Author of question can unsubscribe and do not receive answers', js:true do
+    sign_in(author)
+    visit question_path(authors_question)
+    click_on "unsubscribe"
+    visit destroy_user_session_path
+
+    sign_in(user)
+    visit question_path(authors_question)
+    within '.new_answer' do
+      fill_in 'Body', with: 'Test answer body text'
+      click_on 'Create answer'
+    end
+    open_email(author.email)
+    expect(current_email).to eq nil
+  end
+
+  scenario 'Authenticated user stranger user do not receive answers', js:true do
+    sign_in(author)
+    visit question_path(authors_question)
+    within '.new_answer' do
+      fill_in 'Body', with: 'Test answer body text'
+      click_on 'Create answer'
+    end
+    open_email(user.email)
+    expect(current_email).to eq nil
+  end
+
+  scenario 'Authenticated user can subscrib question and receive answers', js:true do
+    sign_in(user)
+    visit question_path(authors_question)
+    click_on "subscribe"
+    visit destroy_user_session_path
+
+    sign_in(author)
+    visit question_path(authors_question)
+    within '.new_answer' do
+      fill_in 'Body', with: 'Test answer body text'
+      click_on 'Create answer'
+    end
+    open_email(user.email)
+    expect(current_email).to have_content authors_question.title
+    expect(current_email).to have_content 'Test answer body text'
+  end
 end
