@@ -11,10 +11,4 @@ RSpec.describe AnswerNotificationJob, type: :job do
     AnswerNotificationJob.perform_now(answer)
   end
 
-  # test for unsubscribered_user
-
-  #it 'do not send answer notification for unsubscribered users' do
-  #  expect(AnswerNotificationMailer).to_not receive(:notification).with(unsubscribered_user, answer).and_call_original
-  #  AnswerNotificationJob.perform_now(answer)
-  #end
 end
