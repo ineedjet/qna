@@ -1,10 +1,6 @@
 .btn-group.subscribe-group.btn-group-xs.pull-right role="group"
-  - if current_user && !current_user.subscribed_to?(question)
-    => link_to 'subscribe', question_subscriptions_path(question), method: :post, remote: true, data: { type: :json }, class: "btn btn-default subs subscribe"
-  - else
-    => link_to 'subscribe', question_subscriptions_path(question), method: :post, remote: true, data: {type: :json}, class: "btn btn-default subs subscribe", style: "display: none"
+  => link_to 'subscribe', question_subscriptions_path(question), method: :post, remote: true, data: {type: :json},
+        class: "btn btn-default subs subscribe", style: "#{"display: none" unless current_user && !current_user.subscribed_to?(question)}"
 
-  - if current_user && current_user.subscribed_to?(question)
-    => link_to 'unsubscribe', question_subscriptions_path(question), method: :delete, remote: true, data: { type: :json }, class: "btn btn-default subs unsubscribe"
-  - else
-    => link_to 'unsubscribe', question_subscriptions_path(question), method: :delete, remote: true, data: {type: :json}, class: "btn btn-default subs unsubscribe", style: "display: none"
+  => link_to 'unsubscribe', question_subscriptions_path(question), method: :delete, remote: true, data: { type: :json },
+        class: "btn btn-default subs unsubscribe", style: "#{"display: none" unless current_user && current_user.subscribed_to?(question)}"
