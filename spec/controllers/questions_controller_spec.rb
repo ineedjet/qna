@@ -8,30 +8,6 @@ RSpec.describe QuestionsController, type: :controller do
   let(:question) { create(:question, user: user) }
   let(:question2) { create(:question, user: user2) }
 
-  describe 'patch #subscribe' do
-    context "Not subscribered user subscribe" do
-      sign_in_user
-
-      it 'saves the new subscribe in the database' do
-        expect { post :subscribe, params: { id: question }, format: :json }.to change(question.subscriptions, :count ).by(1)
-        expect(JSON.parse(response.body)['subscription_status']).to be_truthy
-      end
-    end
-  end
-
-  describe 'patch #unsubscribe' do
-    let!(:subscription) { create(:subscription, user: user, question: question2 ) }
-
-    context "Subscribered user unsubscribe" do
-      before{ sign_in_the_user(user) }
-
-      it 'saves the new subscribe in the database' do
-        expect { post :unsubscribe, params: { id: question }, format: :json }.to change(question.subscriptions, :count ).by(-1)
-        expect(JSON.parse(response.body)['subscription_status']).to be_falsey
-      end
-    end
-  end
-
   describe 'GET #index' do
     let(:action) { :index }
     let!(:questions) { create_list(:question, 2, user: user) }

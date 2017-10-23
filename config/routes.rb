@@ -17,8 +17,7 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: [:voted,], shallow: true do
-    post 'subscribe', on: :member
-    post 'unsubscribe', on: :member
+    resource :subscriptions,  only: [:create, :destroy]
     resources :comments, only: [:create]
     resources :answers, concerns: [:voted] do
       resources :comments, only: [:create]
