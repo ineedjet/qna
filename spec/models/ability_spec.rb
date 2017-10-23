@@ -25,6 +25,7 @@ RSpec.describe Ability , type: :model do
     let(:user2 ) { create :user }
     let(:question ) { create :question, user: user }
     let(:question2 ) { create :question, user: user2 }
+    let(:subscription) { create :subscription, user: user, question: question }
 
     it { should_not be_able_to :manage, :all }
     it { should be_able_to :read, :all }
@@ -92,8 +93,8 @@ RSpec.describe Ability , type: :model do
     end
 
     context 'Subscribe' do
-      it { should be_able_to :subscribe, question }
-      it { should be_able_to :unsubscribe, question }
+      it { should be_able_to :create, subscription }
+      it { should be_able_to :destroy, subscription }
     end
 
 

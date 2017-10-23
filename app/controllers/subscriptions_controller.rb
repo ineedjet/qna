@@ -1,8 +1,10 @@
 class SubscriptionsController < ApplicationController
+  before_action :authenticate_user!
   before_action :load_question, only: [:create, :destroy]
-  respond_to :json
 
-  skip_authorization_check
+  authorize_resource
+
+  respond_to :json
 
   def create
     current_user.subscribe_to(@question)
