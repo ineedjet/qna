@@ -14,7 +14,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'saves the new subscribe in the database' do
         expect { post :subscribe, params: { id: question }, format: :json }.to change(question.subscriptions, :count ).by(1)
-        expect(JSON.parse(response.body)['subscription_status']).to eq true
+        expect(JSON.parse(response.body)['subscription_status']).to be_truthy
       end
     end
   end
@@ -27,7 +27,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'saves the new subscribe in the database' do
         expect { post :unsubscribe, params: { id: question }, format: :json }.to change(question.subscriptions, :count ).by(-1)
-        expect(JSON.parse(response.body)['subscription_status']).to eq false
+        expect(JSON.parse(response.body)['subscription_status']).to be_falsey
       end
     end
   end

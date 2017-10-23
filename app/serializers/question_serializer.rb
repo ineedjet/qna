@@ -4,12 +4,6 @@ class QuestionSerializer < ActiveModel::Serializer
   has_many :attachments
 
   def subscription_status
-    if current_user.present?
-      if current_user.subscribed_to?(object)
-        return true
-      end
-      return false
-    end
-    nil
+    current_user&.subscribed_to?(object)
   end
 end
