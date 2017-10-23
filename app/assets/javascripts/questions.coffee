@@ -5,7 +5,7 @@
 $ ->
   $(".subs").bind 'ajax:success', (e, data, status, xhr) ->
     question = $.parseJSON(xhr.responseText)
-    if question.subscription_status == true
+    if question.subscription_status
       $(this).parent().find(".subs").hide()
       $(this).parent().find(".unsubscribe").show()
     if question.subscription_status == false
