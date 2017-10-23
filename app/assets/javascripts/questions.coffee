@@ -8,7 +8,7 @@ $ ->
     if question.subscription_status
       $(this).parent().find(".subs").hide()
       $(this).parent().find(".unsubscribe").show()
-    if question.subscription_status == false
+    else
       $(this).parent().find(".subs").hide()
       $(this).parent().find(".subscribe").show()
 
