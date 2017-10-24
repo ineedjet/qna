@@ -4,8 +4,33 @@ RSpec.describe User do
   it {should have_many(:questions).dependent(:destroy)}
   it {should have_many(:answers).dependent(:destroy)}
   it {should have_many(:authorizations).dependent(:destroy)}
+  it {should have_many(:subscriptions).dependent(:destroy)}
   it { should validate_presence_of :email }
   it { should validate_presence_of :password }
+
+  describe 'user can use subscribes' do
+    let(:user) { create(:user) }
+    let(:question) { create(:question) }
+    let(:subscribed_question) { create(:question) }
+    let!(:subscription) { create(:subscription, user: user, question: subscribed_question ) }
+
+    it 'user subscribe status for question' do
+      expect(user).to_not be_subscribed_to(question)
+      expect(user).to be_subscribed_to(subscribed_question)
+    end
+
+    it 'user can subscribe to question' do
+      expect(user).to_not be_subscribed_to(question)
+      expect{ user.subscribe_to(question) }.to change(Subscription, :count).by(1)
+      expect(user).to be_subscribed_to(question)
+    end
+
+    it 'user can unsubscribe to question' do
+      expect(user).to be_subscribed_to(subscribed_question)
+      expect{ user.unsubscribe_to(subscribed_question) }.to change(Subscription, :count).by(-1)
+      expect(user).to_not be_subscribed_to(subscribed_question)
+    end
+  end
 
   context 'check author_of?' do
     let(:user) { create(:user) }

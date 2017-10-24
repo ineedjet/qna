@@ -1,0 +1,7 @@
+h1 Daily digest
+
+-if @questions.present?
+  - @questions.each do |question|
+    p
+      = link_to question.title, question
+      p = question.body

@@ -4,9 +4,22 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: [:facebook]
   has_many :questions, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :authorizations, dependent: :destroy
+
+  def subscribed_to?(question)
+    self.subscriptions.where(question: question).first
+  end
+
+  def subscribe_to(question)
+    self.subscriptions.create!(question: question)
+  end
+
+  def unsubscribe_to(question)
+    self.subscriptions.where(question: question).destroy_all
+  end
 
   def author_of?(object)
     self.id == object.user_id

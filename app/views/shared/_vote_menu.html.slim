@@ -1,17 +1,14 @@
 .btn-group.btn-group-xs.pull-right role="group"
-  - if current_user && votable.can_vote?(current_user)
-    => link_to 'vote +1', polymorphic_path(votable, action: :vote_positive), method: :post, remote: true, data: { type: :json }, class: "btn btn-default vote vote_positive"
-  - else
-    => link_to 'vote +1', polymorphic_path(votable, action: :vote_positive), method: :post, remote: true, data: {type: :json}, class: "btn btn-default vote vote_positive", style: "display: none"
+  => link_to 'vote +1', polymorphic_path(votable, action: :vote_positive), method: :post, remote: true,
+          data: {type: :json}, class: "btn btn-default vote vote_positive",
+          style: "#{"display: none" unless current_user && votable.can_vote?(current_user) }"
 
   span class="btn btn-default vote_raiting" = "rating: " + votable.vote_rating.to_s
 
-  - if current_user && votable.can_vote?(current_user)
-    => link_to 'vote -1', polymorphic_path(votable, action: :vote_negative), method: :post, remote: true, data: { type: :json }, class: "btn btn-default vote vote_negative"
-  - else
-    => link_to 'vote -1', polymorphic_path(votable, action: :vote_negative), method: :post, remote: true, data: { type: :json }, class: "btn btn-default vote vote_negative", style: "display: none"
+  => link_to 'vote -1', polymorphic_path(votable, action: :vote_negative), method: :post, remote: true,
+          data: { type: :json }, class: "btn btn-default vote vote_negative",
+          style: "#{"display: none" unless current_user && votable.can_vote?(current_user) }"
 
-  - if current_user && votable.vote_by(current_user)
-    => link_to 'delete vote', polymorphic_path(votable, action: :vote_del), method: :post, remote: true, data: { type: :json }, class: "btn btn-danger vote_delete"
-  - else
-    => link_to 'delete vote', polymorphic_path(votable, action: :vote_del), method: :post, remote: true, data: { type: :json }, class: "btn btn-danger vote_delete", style: "display: none"
+  => link_to 'delete vote', polymorphic_path(votable, action: :vote_del), method: :post, remote: true,
+          data: { type: :json }, class: "btn btn-danger vote_delete",
+          style: "#{"display: none" unless current_user && votable.vote_by(current_user) }"

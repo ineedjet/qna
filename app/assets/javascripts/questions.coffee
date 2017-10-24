@@ -3,6 +3,16 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $ ->
+  $(".subs").bind 'ajax:success', (e, data, status, xhr) ->
+    question = $.parseJSON(xhr.responseText)
+    if question.subscription_status
+      $(this).parent().find(".subs").hide()
+      $(this).parent().find(".unsubscribe").show()
+    else
+      $(this).parent().find(".subs").hide()
+      $(this).parent().find(".subscribe").show()
+
+
   $('.edit-question-link').click (e) ->
     e.preventDefault();
     $(this).hide();

@@ -33,6 +33,7 @@ class Ability
       votable.user != user && !votable.vote_by(user)
     end
     can :me, User
+    can [:create, :destroy], Subscription
 
   end
 

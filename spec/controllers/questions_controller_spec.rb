@@ -95,6 +95,7 @@ RSpec.describe QuestionsController, type: :controller do
         post :create, params: { question: attributes_for(:question) }
         expect(assigns(:question).user).to eq @user
       end
+
     end
 
     context 'with invalid attributes' do
@@ -142,15 +143,15 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'with same user and invalid attributes' do
       sign_in_user
-      before do
-        question.update(user_id: @user.id)
-        patch :update, params: { id: question, question: { title:'new title', body: nil } }, format: :js
-      end
 
       it 'does not change question attributes' do
+        @original_title = question.title
+        @original_body = question.body
+        question.update(user_id: @user.id)
+        patch :update, params: { id: question, question: { title:'new title', body: nil } }, format: :js
         question.reload
-        expect(question.title).to eq 'MyString'
-        expect(question.body).to eq 'MyText'
+        expect(question.title).to eq @original_title
+        expect(question.body).to eq @original_body
       end
     end
 
