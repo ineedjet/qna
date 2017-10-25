@@ -12,12 +12,15 @@
 
 ActiveRecord::Schema.define(version: 20171021153224) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "answers", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "question_id"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.boolean "best"
     t.index ["user_id"], name: "index_answers_on_user_id"
   end
@@ -32,7 +35,7 @@ ActiveRecord::Schema.define(version: 20171021153224) do
   end
 
   create_table "authorizations", force: :cascade do |t|
-    t.integer "user_id"
+    t.bigint "user_id"
     t.string "provider"
     t.string "uid"
     t.datetime "created_at", null: false
@@ -43,16 +46,16 @@ ActiveRecord::Schema.define(version: 20171021153224) do
 
   create_table "comments", force: :cascade do |t|
     t.text "body"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.string "commentable_type"
-    t.integer "commentable_id"
+    t.bigint "commentable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
-  create_table "oauth_access_grants", force: :cascade do |t|
+  create_table "oauth_access_grants", id: :serial, force: :cascade do |t|
     t.integer "resource_owner_id", null: false
     t.integer "application_id", null: false
     t.string "token", null: false
@@ -64,7 +67,7 @@ ActiveRecord::Schema.define(version: 20171021153224) do
     t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
   end
 
-  create_table "oauth_access_tokens", force: :cascade do |t|
+  create_table "oauth_access_tokens", id: :serial, force: :cascade do |t|
     t.integer "resource_owner_id"
     t.integer "application_id"
     t.string "token", null: false
@@ -79,7 +82,7 @@ ActiveRecord::Schema.define(version: 20171021153224) do
     t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
   end
 
-  create_table "oauth_applications", force: :cascade do |t|
+  create_table "oauth_applications", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.string "uid", null: false
     t.string "secret", null: false
@@ -95,13 +98,13 @@ ActiveRecord::Schema.define(version: 20171021153224) do
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
+    t.bigint "user_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
   create_table "subscriptions", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "question_id"
+    t.bigint "user_id"
+    t.bigint "question_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["question_id"], name: "index_subscriptions_on_question_id"
@@ -128,13 +131,20 @@ ActiveRecord::Schema.define(version: 20171021153224) do
 
   create_table "votes", force: :cascade do |t|
     t.integer "vote_type"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.string "votable_type"
-    t.integer "votable_id"
+    t.bigint "votable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_votes_on_user_id"
     t.index ["votable_type", "votable_id"], name: "index_votes_on_votable_type_and_votable_id"
   end
 
+  add_foreign_key "answers", "users"
+  add_foreign_key "authorizations", "users"
+  add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "questions", "users"
+  add_foreign_key "subscriptions", "questions"
+  add_foreign_key "subscriptions", "users"
 end
