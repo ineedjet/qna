@@ -1,5 +1,5 @@
 class SearchController < ApplicationController
-  skip_authorization_check
+  authorize_resource
 
   def search
     render 'search'
