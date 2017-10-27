@@ -2,5 +2,5 @@
   .form-group
     = select_tag :for, options_for_select(%w(All Question Answer User Comment), params[:for]), class: 'form-control'
   .form-group
-    = text_field_tag 'query', params[:query], required: true, class: 'form-control'
+    = text_field_tag 'query', params[:q], required: true, class: 'form-control'
   = submit_tag 'Find!', class: 'btn btn-primary'
