@@ -11,14 +11,16 @@ feature 'Search for user, question, answer, comment', %q{
   given!(:answer) { create(:answer, body: 'answer test body') }
   given!(:comment) { create(:comment, body: 'test comment body', commentable: question) }
 
-  scenario 'User make unspecific search' do
+  scenario 'User make unspecific search', js:true do
     ThinkingSphinx::Test.run do
       visit root_path
-      within '.search' do
+      within '.search-form' do
         select 'All', from: 'for'
         fill_in 'q', with: 'test'
         click_on 'Find'
+      end
 
+      within '#search_results' do
         expect(page).to have_content 'Question'
         expect(page).to have_content question.title
         expect(page).to have_content 'Answer'
@@ -32,14 +34,16 @@ feature 'Search for user, question, answer, comment', %q{
   end
 
   %w(Answer Question User Comment).each do |search_object|
-    scenario "User make #{search_object} search" do
+    scenario "User make #{search_object} search", js:true do
       ThinkingSphinx::Test.run do
         visit root_path
-        within '.search' do
+        within '.search-form' do
           select search_object, from: 'for'
           fill_in 'q', with: 'test'
           click_on 'Find'
+        end
 
+        within '#search_results' do
           expect(page).to have_content search_object
         end
       end
