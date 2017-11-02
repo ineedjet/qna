@@ -68,7 +68,7 @@ RSpec.describe CommentsController, type: :controller do
       end
 
       it 'check commentable is commentable' do
-        post :create, params: { answer_id: question.id, commentable: 'answer', comment: attributes_for(:comment)  }, format: :js
+        post :create, params: { answer_id: answer.id, commentable: 'answer', comment: attributes_for(:comment)  }, format: :js
         expect(assigns(:comment).commentable).to eq answer
       end
     end

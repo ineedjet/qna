@@ -4,6 +4,7 @@ FactoryGirl.define do
   end
 
   factory :answer do
+    question { create(:question) }
     body
   end
 

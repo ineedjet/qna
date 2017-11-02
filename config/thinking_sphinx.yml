@@ -1,0 +1,8 @@
+development: &my_settings
+  min_word_len: 2
+
+test:
+  <<: *my_settings
+  mysql41: 9307
+production:
+  <<: *my_settings

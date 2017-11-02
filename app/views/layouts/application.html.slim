@@ -31,6 +31,8 @@ html lang="en"
                 a >>>>
               - if current_user
                 li = link_to "Завершить сессию #{current_user.email}", destroy_user_session_path
+              li
+                = render 'search/form'
 
     .container
       .row

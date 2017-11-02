@@ -26,3 +26,7 @@
 /public/tmp
 /public/uploads
 /public/spec
+
+# Sphinx config
+config/*.sphinx.conf
+db/sphinx
