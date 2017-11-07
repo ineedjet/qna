@@ -1,18 +1,20 @@
 div id="Question-#{question.id}"
   .panel.panel-primary
     .panel-heading
-      = link_to question.title, question, class: "question-link"
-      = render 'shared/vote_menu', votable: question
-      = render 'shared/subscription_menu', question: question
+      - cache question do
+        = link_to question.title, question, class: "question-link"
+        = render 'shared/vote_menu', votable: question
+        = render 'shared/subscription_menu', question: question
     .panel-body
-      p = question.body
-      - if question.attachments.present?
-        p Attachments:
-        ul
-          = render question.attachments
-      .comments
-        p Comments:
-        = render question.comments
+      - cache question do
+        p = question.body
+        - if question.attachments.present?
+          p Attachments:
+          ul
+            = render question.attachments
+        .comments
+          p Comments:
+          = render question.comments
       - if current_user
         .new_comment
           = form_for [question, question.comments.build], :html => {:class => "display"}, remote: true do |f|

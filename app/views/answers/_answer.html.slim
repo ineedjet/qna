@@ -1,15 +1,16 @@
 div id="Answer-#{answer.id}" class="#{ 'best panel-danger' if answer.best? }"
   .panel.panel-default
     .panel-body
-      p = answer.body
-      - if answer.attachments.present?
-        p Attachments:
-        ul
-          = render answer.attachments
+      - cache answer do
+        p = answer.body
+        - if answer.attachments.present?
+          p Attachments:
+          ul
+            = render answer.attachments
 
-      .comments
-        p Comments:
-        = render answer.comments
+        .comments
+          p Comments:
+          = render answer.comments
 
       - if current_user
         .new_comment
@@ -22,8 +23,8 @@ div id="Answer-#{answer.id}" class="#{ 'best panel-danger' if answer.best? }"
 
             = f.submit 'Create comment', class: "btn btn-primary btn-xs"
             .errors
-
-      = render 'shared/vote_menu', votable: answer
+      - cache answer do
+        = render 'shared/vote_menu', votable: answer
     .panel-footer
       - if current_user&.author_of? @answer.question
         => link_to 'Set best answer', set_best_answer_path(answer), method: :patch, remote: true, class: "set-best-answer-link btn btn-primary btn-xs"
